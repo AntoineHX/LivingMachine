@@ -12,16 +12,17 @@ void on_trackbar( int, void* )
 int main(int argc, char* argv[])
 {
 	int height,width,step,channels;  //parameters of the image we are working on
+	int posX, posY; //Position objet
+	CvMoments *moments = (CvMoments*)malloc(sizeof(CvMoments)); //Variable moyenne position
 	
     // Open capture device. 0 is /dev/video0, 1 is /dev/video1, etc.
     CvCapture* capture = cvCaptureFromCAM( 0 );
     
-    if( !capture )
-    {
-            fprintf( stderr, "ERROR: capture is NULL \n" );
-            getchar();
+    if( !capture ){
+            printf("ERROR: capture is NULL \n" );
             return -1;
     }
+    
     // grab an image from the capture
     IplImage* frame = cvQueryFrame( capture );
     
@@ -71,22 +72,36 @@ int main(int argc, char* argv[])
         // Get one frame
         frame = cvQueryFrame( capture );
         
-        if( !frame )
-        {
-                fprintf( stderr, "ERROR: frame is null...\n" );
-                getchar();
+        if( !frame ){
+                printf("ERROR: frame is null...\n" );
                 break;
         }
  
         // Covert color space to HSV as it is much easier to filter colors in the HSV color-space.
         cvCvtColor(frame, hsv_frame, CV_BGR2HSV);
- 
+		//Binarisation
         cvInRangeS(hsv_frame, cvScalar(iLowH, iLowS, iLowV), cvScalar(iHighH, iHighS, iHighV), threshold);
-           
+        //Blur
+        cvSmooth( threshold, threshold, CV_GAUSSIAN, 9, 9 ); //Legère suppression des parasites
+        
+        // Calculate the moments to estimate the position of the ball 
+        
+        cvMoments(threshold, moments, 1); 
+        // The actual moment values 
+        double moment10 = cvGetSpatialMoment(moments, 1, 0); 
+        double moment01 = cvGetSpatialMoment(moments, 0, 1); 
+        double area = cvGetCentralMoment(moments, 0, 0);
+        
+        posX= moment10/area;
+        posY= moment01/area;
+        
+        cvCircle(frame, cvPoint(posX,posY), 5, cvScalar(0,0,255), -1, 8, 0 );
+        
          cvShowImage( "Camera", frame ); // Original stream with detected ball overlay
          cvShowImage( "HSV", hsv_frame); // Original stream in the HSV color space
          cvShowImage( "Binaire", threshold); // The stream after color filtering
      
+
         if( (cvWaitKey(10) ) >= 0 ) break; //Arret capture
     }
     
@@ -94,6 +109,8 @@ int main(int argc, char* argv[])
 	
      // Release the capture device housekeeping
      cvReleaseCapture( &capture );
-     cvDestroyWindow( "mywindow" );
+     
+     cvReleaseImage(&threshold);
+     
      return 0;
    }
