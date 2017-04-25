@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/sasl/eleves/rob/3408017/projet_info/DisplayImage.cpp
+stdio.h
+-
+opencv2/opencv.hpp
+-
+
