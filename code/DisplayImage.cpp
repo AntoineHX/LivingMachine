@@ -28,6 +28,7 @@ int main(int argc, char* argv[])
     // Create a window in which the captured images will be presented
     cvNamedWindow( "Camera", CV_WINDOW_AUTOSIZE );
     cvNamedWindow( "HSV", CV_WINDOW_AUTOSIZE );
+    cvNamedWindow( "Binaire", CV_WINDOW_AUTOSIZE );
     
     // get the image data
       height    = frame->height;
@@ -39,9 +40,31 @@ int main(int argc, char* argv[])
     
     // Initialize different images that are going to be used in the program
     IplImage*  hsv_frame    = cvCreateImage(size, IPL_DEPTH_8U, 3); // image converted to HSV plane
-    IplImage*  thresholded   = cvCreateImage(size, IPL_DEPTH_8U, 1);
+    IplImage*  threshold   = cvCreateImage(size, IPL_DEPTH_8U, 1);
     
-  
+    //Controle couleur
+	cvNamedWindow("Control", CV_WINDOW_AUTOSIZE); //create a window called "Control"
+
+	//Setup Kirby
+	 int iLowH = 139;
+	 int iHighH = 179;
+
+	 int iLowS = 48; 
+	 int iHighS = 255;
+
+	 int iLowV = 101;
+	 int iHighV = 255;
+
+	 //Create trackbars in "Control" window
+	 cvCreateTrackbar("LowH", "Control", &iLowH, 179); //Hue (0 - 179)
+	 cvCreateTrackbar("HighH", "Control", &iHighH, 179);
+
+	 cvCreateTrackbar("LowS", "Control", &iLowS, 255); //Saturation (0 - 255)
+	 cvCreateTrackbar("HighS", "Control", &iHighS, 255);
+
+	 cvCreateTrackbar("LowV", "Control", &iLowV, 255); //Value (0 - 255)
+	 cvCreateTrackbar("HighV", "Control", &iHighV, 255);
+	  
     while( 1 )
     {   
 
@@ -58,15 +81,17 @@ int main(int argc, char* argv[])
         // Covert color space to HSV as it is much easier to filter colors in the HSV color-space.
         cvCvtColor(frame, hsv_frame, CV_BGR2HSV);
  
-        cvInRangeS(frame, cvScalar(255, 100, 230), cvScalar(255, 200, 255), thresholded);
+        cvInRangeS(hsv_frame, cvScalar(iLowH, iLowS, iLowV), cvScalar(iHighH, iHighS, iHighV), threshold);
            
          cvShowImage( "Camera", frame ); // Original stream with detected ball overlay
          cvShowImage( "HSV", hsv_frame); // Original stream in the HSV color space
-         cvShowImage( "After Color Filtering", thresholded ); // The stream after color filtering
+         cvShowImage( "Binaire", threshold); // The stream after color filtering
      
-        if( (cvWaitKey(10) ) >= 0 ) break;
+        if( (cvWaitKey(10) ) >= 0 ) break; //Arret capture
     }
-
+    
+	cvWaitKey(0); //Fin programme
+	
      // Release the capture device housekeeping
      cvReleaseCapture( &capture );
      cvDestroyWindow( "mywindow" );
