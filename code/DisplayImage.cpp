@@ -1,13 +1,9 @@
 
 #include <cv.h> 
 #include <highgui.h>
-#include <cxcore.h>
+//#include <cxcore.h>
 
  
-//callback for trackbar. nothing to be done here     
-void on_trackbar( int, void* )
-{
-}
 
 int main(int argc, char* argv[])
 {
@@ -56,6 +52,7 @@ int main(int argc, char* argv[])
 	 int iLowV = 101;
 	 int iHighV = 255;
 
+
 	 //Create trackbars in "Control" window
 	 cvCreateTrackbar("LowH", "Control", &iLowH, 179); //Hue (0 - 179)
 	 cvCreateTrackbar("HighH", "Control", &iHighH, 179);
@@ -65,6 +62,7 @@ int main(int argc, char* argv[])
 
 	 cvCreateTrackbar("LowV", "Control", &iLowV, 255); //Value (0 - 255)
 	 cvCreateTrackbar("HighV", "Control", &iHighV, 255);
+
 	  
     while( 1 )
     {   
@@ -79,10 +77,14 @@ int main(int argc, char* argv[])
  
         // Covert color space to HSV as it is much easier to filter colors in the HSV color-space.
         cvCvtColor(frame, hsv_frame, CV_BGR2HSV);
-		//Binarisation
+	
+	//Blur
+	cvSmooth( hsv_frame, hsv_frame, CV_GAUSSIAN, 15, 15); //suppression des parasites par flou gaussien
+
+	//Binarisation
         cvInRangeS(hsv_frame, cvScalar(iLowH, iLowS, iLowV), cvScalar(iHighH, iHighS, iHighV), threshold);
-        //Blur
-        cvSmooth( threshold, threshold, CV_GAUSSIAN, 9, 9 ); //Legère suppression des parasites
+      
+        //cvSmooth( threshold, threshold, CV_GAUSSIAN, 9, 9 ); //Legère suppression des parasites
         
         // Calculate the moments to estimate the position of the ball 
         
@@ -95,7 +97,12 @@ int main(int argc, char* argv[])
         posX= moment10/area;
         posY= moment01/area;
         
-        cvCircle(frame, cvPoint(posX,posY), 5, cvScalar(0,0,255), -1, 8, 0 );
+	//Affichage zone suivie objet
+        cvCircle(frame, cvPoint(width/2,height/2), 100, CV_RGB(255, 0, 0), 4, 8, 0 );
+
+	//Affichage position de l'objet
+	cvLine(frame, cvPoint(posX-20,posY), cvPoint(posX+20,posY), CV_RGB(0, 0, 255), 4, 8, 0 );
+	cvLine(frame, cvPoint(posX,posY-20), cvPoint(posX,posY+20), CV_RGB(0, 0, 255), 4, 8, 0 );
         
          cvShowImage( "Camera", frame ); // Original stream with detected ball overlay
          cvShowImage( "HSV", hsv_frame); // Original stream in the HSV color space
