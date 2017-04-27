@@ -3,7 +3,7 @@
 #include <highgui.h>
 //#include <cxcore.h>
 
- 
+#include <SFML/Window.hpp>
 
 int main(int argc, char* argv[])
 {
@@ -26,6 +26,9 @@ int main(int argc, char* argv[])
     cvNamedWindow( "Camera", CV_WINDOW_AUTOSIZE );
     cvNamedWindow( "HSV", CV_WINDOW_AUTOSIZE );
     cvNamedWindow( "Binaire", CV_WINDOW_AUTOSIZE );
+
+    sf::Window window;
+    window.create(sf::VideoMode(800, 600), "My window",sf::Style::Default);
     
     // get the image data
       height    = frame->height;
