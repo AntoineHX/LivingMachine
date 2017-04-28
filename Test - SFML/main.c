@@ -9,8 +9,12 @@ Commandes :
 gcc -c main.c
 gcc main.o -o main -lcsfml-graphics -lcsfml-window -lcsfml-audio -lcsfml-system
 
-*/
+opencv :
+gcc opencv.c -o opencv `pkg-config --libs --cflags opencv` -ldl -lm
 
+*/
+#define EXIT_FAILURE 0
+#define EXIT_SUCCESS 1
 int main()
 {
     sfVideoMode mode = {800, 600, 32};

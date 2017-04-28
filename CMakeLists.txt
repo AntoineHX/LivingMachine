@@ -22,7 +22,7 @@ file(
 #Recherche des bibliothèques
 
 find_package( OpenCV REQUIRED )
-find_package(SFML 2 COMPONENTS system window graphics audio REQUIRED)
+#find_package(SFML 2 COMPONENTS system window graphics audio REQUIRED)
 
 add_executable( DisplayImage ${source_files} )
 target_link_libraries( DisplayImage ${OpenCV_LIBS} )
