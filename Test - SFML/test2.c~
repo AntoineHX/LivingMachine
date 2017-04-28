@@ -1,0 +1,11 @@
+#include <SFML/Graphics.h>
+
+int main(){
+	sfVideoMode mode = {800, 600, 32};
+	sfRenderWindow* window;
+    	/* Create the main window */
+   	window = sfRenderWindow_create(mode, "SFML window", sfResize | sfClose, NULL);
+
+
+	
+}
