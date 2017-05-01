@@ -4,7 +4,7 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_C
-  "/home/sasl/eleves/rob/3408212/rob3-projetsinfo-g15-2017/src/DisplayImage.c" "/home/sasl/eleves/rob/3408212/rob3-projetsinfo-g15-2017/CMakeFiles/DisplayImage.dir/src/DisplayImage.c.o"
+  "/home/jack/Documents/rob3-projetsinfo-g15-2017/src/DisplayImage.c" "/home/jack/Documents/rob3-projetsinfo-g15-2017/CMakeFiles/DisplayImage.dir/src/DisplayImage.c.o"
   )
 SET(CMAKE_C_COMPILER_ID "GNU")
 
@@ -14,7 +14,8 @@ SET(CMAKE_TARGET_LINKED_INFO_FILES
 
 # The include file search paths:
 SET(CMAKE_C_TARGET_INCLUDE_PATH
-  "/usr/include/opencv"
+  "/usr/local/include/opencv"
+  "/usr/local/include"
   )
 SET(CMAKE_CXX_TARGET_INCLUDE_PATH ${CMAKE_C_TARGET_INCLUDE_PATH})
 SET(CMAKE_Fortran_TARGET_INCLUDE_PATH ${CMAKE_C_TARGET_INCLUDE_PATH})

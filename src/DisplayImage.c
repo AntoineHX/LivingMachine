@@ -1,11 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <cv.h> 
 #include <highgui.h>
-//#include <cxcore.h>
+//#include <opencv2/highgui.hpp> //Pour le cvRound
+//#include "opencv2/videoio/videoio_c.h" //Pour le CvCapture*
 
+//#include <cxcore.h>
 //#include <SFML/Window.hpp>
+
+/*Headers*/
+void controle_moteur(int vecX, int vecY, int rayon);
+int limite_moteur(int val_pwm);
+
 
 int main(int argc, char* argv[])
 {
@@ -137,23 +143,51 @@ int main(int argc, char* argv[])
      return 0;
    }
 
-int* controle_moteur(int vecX, int vecY, int rayon){
+/*On se rapproche de (vecX, vecY) si la position se situe en dehors d'un cercle centre sur la camera*/
+void controle_moteur(int vecX, int vecY, int rayon){
 
-	FILE* fichier = fopen("commande.txt",w);
+	int val_pwm[2];
 
-	double norme = sqrt(vecX*vecX + vecY*vecY);
-	
-	if (norme > rayon){
-		if(vecX/norme >= 0.5){
-			on ajoute 1 sur XXX
-		}
-		else{
-			on ajoute 1 sur YYY
-		}
-
+	/*Lecture valeur*/
+	FILE* fichier = NULL;
+	fichier = fopen("/dev/ttyACM0","r");
+	if(fichier==NULL){
+		printf("Erreur ouverture fichier\n");
+		return ;
 	}
-
-
+	
+	fscanf(fichier,"%d,%d",&val_pwm[0],&val_pwm[1]);
+	
 	fclose(fichier);
 
+	/*Ecriture nouvelle valeur*/
+	fichier = fopen("/dev/ttyACM0","w");
+	if(fichier==NULL){
+		printf("Erreur ouverture fichier\n");
+		return ;
+	}
+	double norme = 1.0*vecX*vecX + 1.0*vecY*vecY;
+	
+	if (norme > rayon*rayon){
+		if(vecX >= vecY && limite_moteur(val_pwm[0])){ /*Ecart sur x plus important*/
+			fprintf(fichier,"%d,%d",val_pwm[0]++,val_pwm[1]);
+		}
+		else if(vecX <= vecY && limite_moteur(val_pwm[1])){	/*Ecart sur y plus important*/
+			fprintf(fichier,"%d,%d",val_pwm[0],val_pwm[1]++);
+		}
+	}
+
+	fclose(fichier);
+	return;
+}
+
+/*Verifie que les valeurs envoyees aux moteurs sont correctes*/
+int limite_moteur(int val_pwm){
+	int MAX_PWM = 255;
+	if (val_pwm > MAX_PWM || val_pwm < 0){
+		return 0;
+	}
+	else{
+		return 1;
+	}
 }

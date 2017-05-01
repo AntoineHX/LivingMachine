@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/sasl/eleves/rob/3408212/rob3-projetsinfo-g15-2017
+CMAKE_SOURCE_DIR = /home/jack/Documents/rob3-projetsinfo-g15-2017
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/sasl/eleves/rob/3408212/rob3-projetsinfo-g15-2017
+CMAKE_BINARY_DIR = /home/jack/Documents/rob3-projetsinfo-g15-2017
 
 # Include any dependencies generated for this target.
 include CMakeFiles/DisplayImage.dir/depend.make
@@ -51,17 +51,17 @@ include CMakeFiles/DisplayImage.dir/flags.make
 
 CMakeFiles/DisplayImage.dir/src/DisplayImage.c.o: CMakeFiles/DisplayImage.dir/flags.make
 CMakeFiles/DisplayImage.dir/src/DisplayImage.c.o: src/DisplayImage.c
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/sasl/eleves/rob/3408212/rob3-projetsinfo-g15-2017/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/jack/Documents/rob3-projetsinfo-g15-2017/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building C object CMakeFiles/DisplayImage.dir/src/DisplayImage.c.o"
-	/usr/bin/cc  $(C_DEFINES) $(C_FLAGS) -o CMakeFiles/DisplayImage.dir/src/DisplayImage.c.o   -c /home/sasl/eleves/rob/3408212/rob3-projetsinfo-g15-2017/src/DisplayImage.c
+	/usr/bin/cc  $(C_DEFINES) $(C_FLAGS) -o CMakeFiles/DisplayImage.dir/src/DisplayImage.c.o   -c /home/jack/Documents/rob3-projetsinfo-g15-2017/src/DisplayImage.c
 
 CMakeFiles/DisplayImage.dir/src/DisplayImage.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/DisplayImage.dir/src/DisplayImage.c.i"
-	/usr/bin/cc  $(C_DEFINES) $(C_FLAGS) -E /home/sasl/eleves/rob/3408212/rob3-projetsinfo-g15-2017/src/DisplayImage.c > CMakeFiles/DisplayImage.dir/src/DisplayImage.c.i
+	/usr/bin/cc  $(C_DEFINES) $(C_FLAGS) -E /home/jack/Documents/rob3-projetsinfo-g15-2017/src/DisplayImage.c > CMakeFiles/DisplayImage.dir/src/DisplayImage.c.i
 
 CMakeFiles/DisplayImage.dir/src/DisplayImage.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/DisplayImage.dir/src/DisplayImage.c.s"
-	/usr/bin/cc  $(C_DEFINES) $(C_FLAGS) -S /home/sasl/eleves/rob/3408212/rob3-projetsinfo-g15-2017/src/DisplayImage.c -o CMakeFiles/DisplayImage.dir/src/DisplayImage.c.s
+	/usr/bin/cc  $(C_DEFINES) $(C_FLAGS) -S /home/jack/Documents/rob3-projetsinfo-g15-2017/src/DisplayImage.c -o CMakeFiles/DisplayImage.dir/src/DisplayImage.c.s
 
 CMakeFiles/DisplayImage.dir/src/DisplayImage.c.o.requires:
 .PHONY : CMakeFiles/DisplayImage.dir/src/DisplayImage.c.o.requires
@@ -81,37 +81,41 @@ DisplayImage_EXTERNAL_OBJECTS =
 
 bin/DisplayImage: CMakeFiles/DisplayImage.dir/src/DisplayImage.c.o
 bin/DisplayImage: CMakeFiles/DisplayImage.dir/build.make
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_videostab.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_video.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_ts.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_superres.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_stitching.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_photo.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_ocl.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_objdetect.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_ml.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_legacy.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_imgproc.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_highgui.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_gpu.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_flann.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_features2d.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_core.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_contrib.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_calib3d.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_photo.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_legacy.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_video.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_objdetect.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_ml.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_calib3d.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_features2d.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_highgui.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_imgproc.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_flann.so.2.4.8
-bin/DisplayImage: /usr/lib/x86_64-linux-gnu/libopencv_core.so.2.4.8
+bin/DisplayImage: /usr/local/lib/libopencv_videostab.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_video.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_ts.a
+bin/DisplayImage: /usr/local/lib/libopencv_superres.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_stitching.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_photo.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_ocl.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_objdetect.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_nonfree.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_ml.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_legacy.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_imgproc.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_highgui.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_gpu.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_flann.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_features2d.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_core.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_contrib.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_calib3d.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_nonfree.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_ocl.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_gpu.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_photo.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_objdetect.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_legacy.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_video.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_ml.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_calib3d.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_features2d.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_highgui.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_imgproc.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_flann.so.2.4.13
+bin/DisplayImage: /usr/local/lib/libopencv_core.so.2.4.13
 bin/DisplayImage: CMakeFiles/DisplayImage.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking C executable bin/DisplayImage"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable bin/DisplayImage"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/DisplayImage.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -126,6 +130,6 @@ CMakeFiles/DisplayImage.dir/clean:
 .PHONY : CMakeFiles/DisplayImage.dir/clean
 
 CMakeFiles/DisplayImage.dir/depend:
-	cd /home/sasl/eleves/rob/3408212/rob3-projetsinfo-g15-2017 && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/sasl/eleves/rob/3408212/rob3-projetsinfo-g15-2017 /home/sasl/eleves/rob/3408212/rob3-projetsinfo-g15-2017 /home/sasl/eleves/rob/3408212/rob3-projetsinfo-g15-2017 /home/sasl/eleves/rob/3408212/rob3-projetsinfo-g15-2017 /home/sasl/eleves/rob/3408212/rob3-projetsinfo-g15-2017/CMakeFiles/DisplayImage.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/jack/Documents/rob3-projetsinfo-g15-2017 && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/jack/Documents/rob3-projetsinfo-g15-2017 /home/jack/Documents/rob3-projetsinfo-g15-2017 /home/jack/Documents/rob3-projetsinfo-g15-2017 /home/jack/Documents/rob3-projetsinfo-g15-2017 /home/jack/Documents/rob3-projetsinfo-g15-2017/CMakeFiles/DisplayImage.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/DisplayImage.dir/depend
 
