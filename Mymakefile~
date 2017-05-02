@@ -1,0 +1,8 @@
+all : DisplayImage 
+
+
+DisplayImage : src/DisplayImage.o 
+	gcc -o $@ $< `pkg-cfg opencv --libs` -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
+
+src/DisplayImage : src/DisplayImage.c 
+	gcc -o $@ $< `pkg-cfg opencv --cflags`

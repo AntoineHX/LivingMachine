@@ -6,38 +6,57 @@
 //#include "opencv2/videoio/videoio_c.h" //Pour le CvCapture*
 
 //#include <cxcore.h>
-//#include <SFML/Window.hpp>
+//#include <SFML/Window.h>
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+
+#define CONFIG
+//#define SFML
+
+//ATTENTION AFFICHAGE OPENCV INCOMPATIBLE AVEC AFFICHAGE SFML
 
 /*Headers*/
 void controle_moteur(int vecX, int vecY, int rayon);
 int limite_moteur(int val_pwm);
-
+int image_CV2SFML(IplImage* imcv, sf::Image imsf); //Construction de imsf (RGBA) à partir de imcv (BGR), avec alpha constant (=1)
 
 int main(int argc, char* argv[])
 {
 	int height,width,step,channels;  //parameters of the image we are working on
 	int posX, posY; //Position objet
 	CvMoments *moments = (CvMoments*)malloc(sizeof(CvMoments)); //Variable moyenne position
+	int boucle;
+#ifdef SFML
+
+	//Initialisation SFML
 	
+	sf::Texture txFlux;
+	sf::Sprite spFlux;
+	sf::Image imFlux;
+   	sf::Event event;
+	
+	//Création de la fenetre principale
+	sf::RenderWindow window(sf::VideoMode(800, 600), "KirbyTrack");
+#endif
+
     // Open capture device. 0 is /dev/video0, 1 is /dev/video1, etc.
     CvCapture* capture = cvCaptureFromCAM( 0 );
     
     if( !capture ){
             printf("ERROR: capture is NULL \n" );
-            return -1;
+            return EXIT_FAILURE;
     }
     
+
     // grab an image from the capture
     IplImage* frame = cvQueryFrame( capture );
     
+#ifdef CONFIG
     // Create a window in which the captured images will be presented
     cvNamedWindow( "Camera", CV_WINDOW_AUTOSIZE );
     cvNamedWindow( "HSV", CV_WINDOW_AUTOSIZE );
     cvNamedWindow( "Binaire", CV_WINDOW_AUTOSIZE );
-
-    //sf::Window window;
-    //window.create(sf::VideoMode(800, 600), "My window",sf::Style::Default);
-    
+#endif
     // get the image data
       height    = frame->height;
       width     = frame->width;
@@ -46,12 +65,19 @@ int main(int argc, char* argv[])
      // capture size - 
     CvSize size = cvSize(width,height);
     
+#ifdef SFML
+	//Intialisation de la texture
+	if (!txFlux.create(width, height)){
+		printf("Erreur création texture\n");
+		return EXIT_FAILURE;
+	}
+#endif
+
     // Initialize different images that are going to be used in the program
     IplImage*  hsv_frame    = cvCreateImage(size, IPL_DEPTH_8U, 3); // image converted to HSV plane
     IplImage*  threshold   = cvCreateImage(size, IPL_DEPTH_8U, 1);
     
     //Controle couleur
-	cvNamedWindow("Control", CV_WINDOW_AUTOSIZE); //create a window called "Control"
 
 	//Setup Kirby
 	 int iLowH = 139;
@@ -65,6 +91,8 @@ int main(int argc, char* argv[])
 	CvScalar valinf={iLowH,iLowS,iLowV};
 	CvScalar valsup={iHighH,iHighS,iHighV};
 
+#ifdef CONFIG
+	cvNamedWindow("Control", CV_WINDOW_AUTOSIZE); //create a window called "Control"
 
 	 //Create trackbars in "Control" window
 	 cvCreateTrackbar("LowH", "Control", &iLowH, 179,NULL); //Hue (0 - 179)
@@ -76,9 +104,23 @@ int main(int argc, char* argv[])
 	 cvCreateTrackbar("LowV", "Control", &iLowV, 255,NULL); //Value (0 - 255)
 	 cvCreateTrackbar("HighV", "Control", &iHighV, 255,NULL);
 
-	  
-    while( 1 )
-    {   
+	boucle = 1;
+#endif
+	 
+    while(boucle)//while(window.isOpen())
+    {  
+
+#ifdef SFML
+	boucle = window.isOpen();
+
+	// on inspecte tous les évènements de la fenêtre qui ont été émis depuis la précédente itération
+        while (window.pollEvent(event))
+        {
+            // évènement "fermeture demandée" : on ferme la fenêtre
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+#endif
 
         // Get one frame
         frame = cvQueryFrame( capture );
@@ -88,6 +130,7 @@ int main(int argc, char* argv[])
                 break;
         }
  
+	
         // Covert color space to HSV as it is much easier to filter colors in the HSV color-space.
         cvCvtColor(frame, hsv_frame, CV_BGR2HSV);
 	
@@ -124,23 +167,49 @@ int main(int argc, char* argv[])
 	cvLine(frame, cvPoint(posX-20,posY), cvPoint(posX+20,posY), CV_RGB(0, 0, 255), 4, 8, 0 );
 	cvLine(frame, cvPoint(posX,posY-20), cvPoint(posX,posY+20), CV_RGB(0, 0, 255), 4, 8, 0 );
         }
+
+#ifdef CONFIG
          cvShowImage( "Camera", frame ); // Original stream with detected ball overlay
          cvShowImage( "HSV", hsv_frame); // Original stream in the HSV color space
          cvShowImage( "Binaire", threshold); // The stream after color filtering
-     
-	controle_moteur(posX-width/2, posY-height/2, height/6); //Envoie commande moteur
+#endif
 
+#ifdef SFML
+	//Affichage SFML
+	/* Clear the screen */
+        window.clear(sf::Color::Black);	
+
+	//Conversion de la frame en image smfl  
+	if(image_CV2SFML(frame, imFlux)){
+		printf("Erreur conversion OpenCV-SFML\n");
+		break;
+	}
+     
+	spFlux.setTexture(txFlux);
+
+   	window.draw(spFlux);
+	
+	/* Update the window */
+        //window.display();
+
+	//sfSprite_destroy(sprite);
+    	//sfTexture_destroy(texture);
+#endif
+
+	//controle_moteur(posX-width/2, posY-height/2, height/6); //Envoie commande moteur
+#ifdef CONFIG
         if( (cvWaitKey(10) ) >= 0 ) break; //Arret capture
+#endif
     }
     
-	cvWaitKey(0); //Fin programme
+	//cvWaitKey(0); //Fin programme
 	
      // Release the capture device housekeeping
      cvReleaseCapture( &capture );
      
      cvReleaseImage(&threshold);
      
-     return 0;
+     return EXIT_SUCCESS;
    }
 
 /*On se rapproche de (vecX, vecY) si la position se situe en dehors d'un cercle centre sur la camera*/
@@ -191,3 +260,8 @@ int limite_moteur(int val_pwm){
 		return 1;
 	}
 }
+/*
+int image_CV2SFML(IplImage* imcv, sf::Image imFlux){
+	
+}
+*/
