@@ -1,0 +1,14 @@
+all : KirbyTrack
+
+
+KirbyTrack : KirbyTrack.o 
+	gcc -o $@ $< `pkg-config opencv --libs` -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
+
+KirbyTrack.o : KirbyTrack.c 
+	gcc -o $@ -c $< `pkg-config opencv --cflags`
+
+clean:
+	rm -rf *.o
+
+mrproper : clean
+	rm -rf KirbyTrack
