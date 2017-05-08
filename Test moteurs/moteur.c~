@@ -28,7 +28,7 @@ int main(){
 		printf("Valeurs moteurs xxx et yyy actuelles :\n");
 		fscanf(fichier,"%d %d",angle,angle+1);
 		printf("\nxxx=%d; yyy=%d\n",angle[0]*coeff,angle[1]*coeff);
-	*/
+*/
 		//Ecriture tty
 		printf("\n Valeurs moteurs xxx,yyy ? ");
 		
