@@ -10,8 +10,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-#define CONFIG
-//#define SFML
+//#define CONFIG
+#define SFML
 
 #define KIRBY
 //#define ETOILE
@@ -29,13 +29,14 @@ void Affichage_Tracking(IplImage* frame, int posX, int posY, int width, int heig
 void Position_moy(IplImage* Binaire, int* posX, int * posY); //Effectue le baricentre des pixels d'une image binaire pour obtenir la postion de l'objet
 void traitement(IplImage* frame, IplImage* HSV, IplImage* Binaire, int LowH, int HighH, int LowS, int HighS, int LowV, int HighV); //Effectue une binarisation de frame en fonction des bornes HSV
 
-int image_CV2SFML(IplImage* imcv, sf::Image imsf); //Construction de imsf (RGBA) à partir de imcv (BGR), avec alpha constant (=1)
+int image_CV2SFML(IplImage* imcv, sf::Image imFlux); //Construction de imsf (RGBA) à partir de imcv (BGR), avec alpha constant (=1)
 
 int main(int argc, char* argv[])
 {
 	int height,width,step,channels;  //parameters of the image we are working on
 	int posX, posY; //Position objet
 	int boucle;
+	
 #ifdef SFML
 
 	//Initialisation SFML
@@ -45,8 +46,6 @@ int main(int argc, char* argv[])
 	sf::Image imFlux;
    	sf::Event event;
 	
-	//Création de la fenetre principale
-	sf::RenderWindow window(sf::VideoMode(800, 600), "KirbyTrack");
 #endif
 
     // Open capture device. 0 is /dev/video0, 1 is /dev/video1, etc.
@@ -68,14 +67,14 @@ int main(int argc, char* argv[])
       
      // capture size - 
     CvSize size = cvSize(width,height);
-    
+  
+
+
 #ifdef SFML
-	//Intialisation de la texture
-	if (!txFlux.create(width, height)){
-		printf("Erreur création texture\n");
-		return EXIT_FAILURE;
-	}
+	//Création de la fenetre principale
+	sf::RenderWindow window(sf::VideoMode(width, height), "KirbyTrack");
 #endif
+
 
     // Initialize different images that are going to be used in the program
     IplImage*  hsv_frame    = cvCreateImage(size, IPL_DEPTH_8U, 3); // image converted to HSV plane
@@ -112,7 +111,7 @@ int main(int argc, char* argv[])
 	boucle = 1;
 #endif
 	 
-    while(boucle)//while(window.isOpen())
+    while(boucle)
     {  
 
 #ifdef SFML
@@ -144,26 +143,34 @@ int main(int argc, char* argv[])
 	//Dessine les informations de tracking sur frame
 	Affichage_Tracking(frame, posX, posY, width, height);
 
+
 #ifdef SFML
 	//Affichage SFML
 	/* Clear the screen */
         window.clear(sf::Color::Black);	
 
-	//Conversion de la frame en image smfl  
-	if(image_CV2SFML(frame, imFlux)){
+	//Conversion de la frame en image smfl
+	/*if(image_CV2SFML(frame, imFlux)){
 		printf("Erreur conversion OpenCV-SFML\n");
 		break;
 	}
-     
+     	*/
+	//Enregistrement de la frame openCV
+	cvSaveImage("temp.jpg", frame);
+	
+	//Chargement de la frame en texture SFML
+	if (!txFlux.loadFromFile("temp.jpg")){
+		printf("Erreur chargement image SFML\n" );
+                break;
+	}
+
 	spFlux.setTexture(txFlux);
 
    	window.draw(spFlux);
 	
 	/* Update the window */
-        //window.display();
+        window.display();
 
-	//sfSprite_destroy(sprite);
-    	//sfTexture_destroy(texture);
 #endif
 
 	//controle_moteur(posX-width/2, posY-height/2, height/6); //Envoie commande moteur
@@ -235,11 +242,32 @@ int limite_moteur(int val_pwm){
 		return 1;
 	}
 }
-/*
+
+
 int image_CV2SFML(IplImage* imcv, sf::Image imFlux){
 	
+	int R, G, B;
+	int w = imcv->widthStep;
+	char* ptr = imcv->imageData;
+
+	imFlux.create(imcv->width,imcv->height, NULL); //Initialise une image vide
+
+	for( int y=0; y<imcv->height; y++ ) { 
+        	//uchar* ptr = (uchar*) ( imcv->imageData + y * imcv->widthStep );
+        	for( int x=0; x<imcv->width; x++ ) { 
+            		//Recupération du pixel
+			B = ptr[y*w + 3*x];
+			G = ptr[y*w + 3*x + 1]; 
+			R = ptr[y*w + 3*x + 2];
+
+			//Ecriture du pixel associé
+			imFlux.setPixel(x,y,sf::Color(R,G,B,1)); //Alpha channel = 1
+        	}
+    	}
+
+	return 0;
 }
-*/
+
 
 void traitement(IplImage* frame, IplImage* HSV, IplImage* Binaire, int LowH, int HighH, int LowS, int HighS, int LowV, int HighV){ //Effectue une binarisation de frame en fonction des bornes HSV
 
@@ -251,11 +279,12 @@ void traitement(IplImage* frame, IplImage* HSV, IplImage* Binaire, int LowH, int
 
 	//Binarisation
 
-	//CvScalar valinf={LowH,LowS,LowV};
-	//CvScalar valsup={HighH,HighS,HighV};
+	CvScalar valinf={LowH,LowS,LowV};
+	CvScalar valsup={HighH,HighS,HighV};
 
-        //cvInRangeS(HSV, valinf,valsup, Binaire);
-	cvInRangeS(HSV, CvScalar(LowH,LowS,LowV),CvScalar(HighH,HighS,HighV), Binaire);
+        cvInRangeS(HSV, valinf,valsup, Binaire);
+	//En cas d'erreur sur les trois ligne précédentes
+	//cvInRangeS(HSV, CvScalar(LowH,LowS,LowV),CvScalar(HighH,HighS,HighV), Binaire);
       
         //cvSmooth( Binaire, Binaire, CV_GAUSSIAN, 9, 9 ); //Legère suppression des parasites
 }
