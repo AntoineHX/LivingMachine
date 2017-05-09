@@ -20,6 +20,7 @@
 
 /*Headers*/
 void maj_angle(int vecX, int vecY, int rayon, int* angle); //Met à jour l'angle selon la distance CentreCamera - Cible
+int ajust_pos(int pos, int ref)
 void controle_moteur(int* angle);//Envoie les angles au moteur
 int limite_moteur(int val_pwm);//Verifie que les valeurs envoyees aux moteurs sont correctes
 
@@ -40,6 +41,7 @@ int main(int argc, char* argv[])
 	int posX, posY; //Position objet
 	int boucle;
 	int angle[2] = {100,100};
+	int vecX, vecY;
 
 #ifdef SFML
 	//Initialisation SFML
@@ -173,7 +175,8 @@ int main(int argc, char* argv[])
 
 		//Mouvements moteurs
 		printf("-PREMAJ_ANGLE...: %d %d\n",width,height);
-		maj_angle(posX-width/2, posY-height/2, height/6, angle);
+
+		maj_angle(ajust_pos(posX-width/2,width), ajust_pos(posY-height/2,height), height/10, angle);
 		controle_moteur(angle); 
 		cvWaitKey(50);
 
@@ -200,23 +203,30 @@ int main(int argc, char* argv[])
 
 void maj_angle(int vecX, int vecY, int rayon, int* angle){
 	//On ajustera coeff fonction du rayon. Si la cible est à une distance 5*r, il sera 5x plus rapide que s'il était à 1*r
-//double norme = 1.0*vecX*vecX + 1.0*vecY*vecY;
-	int coeffx = vecX/rayon, coeffy = vecY/rayon, l0, l1; 
+
+	int coeffx, coeffy, l0, l1;
+
 	printf("-MAJ_ANGLE...Valeur maj_angle arguments : %d %d %d\n\tAnciens angles : %d %d\n\t",vecX,vecY,rayon,angle[0],angle[1]);
-//	if (norme > rayon*rayon){ //Si la cible est en dehors d'un certain rayon
 
-		//Ajout d'un angle moteur pondéré par la distance
-		angle[0] += coeffx;
-		angle[1] += coeffy;
 
-		//Majoration - minoration des angles moteurs
-		l0 = limite_moteur(angle[0]);
-		l1 = limite_moteur(angle[1]);
-		if (l0 != 0) angle[0] = l0;
-		if (l1 != 0) angle[1] = l1;
-	//}
+	//Ajout d'un angle moteur pondéré par la distance
+	coeffx = vecX/rayon;
+	coeffy = vecY/rayon;
+	angle[0] += coeffx;
+	angle[1] += coeffy;
 
-		printf("Nouveaux angles : %d %d\n",angle[0],angle[1]);
+	//Majoration - minoration des angles moteurs
+	l0 = limite_moteur(angle[0]);
+	l1 = limite_moteur(angle[1]);
+	if (l0 != 0) angle[0] = l0;
+	if (l1 != 0) angle[1] = l1;
+
+	printf("Nouveaux angles : %d %d\n",angle[0],angle[1]);
+}
+
+int ajust_pos(int pos, int ref){
+	if (pos > ref) return 0;
+	else return pos;
 }
 
 int limite_moteur(int val_pwm){
