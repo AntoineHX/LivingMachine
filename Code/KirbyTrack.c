@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 	sf::Texture txFlux;
 	sf::Sprite spFlux;
 	sf::Image imFlux;
-  sf::Event event;
+  	sf::Event event;
 	
 #endif
 
@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
 
 #ifdef SFML
 	//Création de la fenetre principale
-	sf::RenderWindow window(sf::VideoMode(width, height), "KirbyTrack");
+	sf::RenderWindow window(sf::VideoMode(width+300, height), "KirbyTrack");
 #endif
 
     // Initialize different images that are going to be used in the program
@@ -153,7 +153,7 @@ int main(int argc, char* argv[])
 #ifdef SFML
 	//Affichage SFML
 	/* Clear the screen */
-        window.clear(sf::Color::Black);	
+        window.clear(sf::Color::White);	
 
 	//Conversion de la frame en image smfl
 	/*if(image_CV2SFML(frame, imFlux)){
@@ -162,19 +162,39 @@ int main(int argc, char* argv[])
 	}
      	*/
 	//Enregistrement de la frame openCV
-	cvSaveImage("temp.jpg", frame);
+	cvSaveImage("Stock SFML/temp.jpg", frame);
 	
 	//Chargement de la frame en texture SFML
-	if (!txFlux.loadFromFile("temp.jpg")){
+	if (!txFlux.loadFromFile("Stock SFML/temp.jpg")){
 		printf("Erreur chargement image SFML\n" );
                 break;
 	}
 
 	spFlux.setTexture(txFlux);
 
+	window.draw(spFlux);
 
-		window.draw(spFlux);
+//TEST SFML
+	sf::Texture texture;
+	if (!texture.loadFromFile("Stock SFML/red_button.jpeg")){
+		printf("Erreur chargement image SFML\n" );
+                break;
+	}
 	
+	sf::Sprite sprite;
+	sprite.setTexture(texture);
+
+	sprite.setPosition(sf::Vector2f(width, 0));
+
+	window.draw(sprite);
+	
+	sf::Vector2i PosMouse = sf::Mouse::getPosition(window);
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)&&(PosMouse.x>640)&&(PosMouse.x<760)&&(PosMouse.y>0)&&(PosMouse.y<120)){
+		printf("\n\n\n OK \n\n\n");
+	}
+
+	printf("Pos Mouse : %d %d \n", PosMouse.x, PosMouse.y);
 
 	/* Update the window */
         window.display();
@@ -186,6 +206,7 @@ int main(int argc, char* argv[])
 
 		maj_angle(ajust_pos(posX-width/2,width), ajust_pos(posY-height/2,height), height/8, angle);
 		controle_moteur(angle); 
+
 		cvWaitKey(100);
 
 #ifdef CONFIG
