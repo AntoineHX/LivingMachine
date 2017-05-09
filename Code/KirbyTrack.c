@@ -10,8 +10,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-#define CONFIG
-//#define SFML
+//#define CONFIG
+#define SFML
 
 #define KIRBY
 //#define ETOILE
@@ -44,6 +44,8 @@ int main(int argc, char* argv[])
 	double angle[2] = {100,100};
 	int vecX, vecY;
 
+	int tracking;
+
 
 #ifdef SFML
 	//Initialisation SFML
@@ -52,6 +54,8 @@ int main(int argc, char* argv[])
 	sf::Sprite spFlux;
 	sf::Image imFlux;
   	sf::Event event;
+
+	tracking = 0; //Pas de tracking de base en mode SFML
 	
 #endif
 
@@ -115,6 +119,7 @@ int main(int argc, char* argv[])
 	config(&iLowH, &iHighH, &iLowS, &iHighS, &iLowV, &iHighV);
 
 	boucle = 1;
+	tracking = 1; //Tracking de base en mode CONFIG
 #endif
 	 
     while(boucle)
@@ -161,6 +166,7 @@ int main(int argc, char* argv[])
 		break;
 	}
      	*/
+
 	//Enregistrement de la frame openCV
 	cvSaveImage("Stock SFML/temp.jpg", frame);
 	
@@ -175,32 +181,57 @@ int main(int argc, char* argv[])
 	window.draw(spFlux);
 
 //TEST SFML
-	sf::Texture texture;
-	if (!texture.loadFromFile("Stock SFML/red_button.jpeg")){
-		printf("Erreur chargement image SFML\n" );
+	sf::Vector2i PosMouse = sf::Mouse::getPosition(window);
+	//Detection du bouton tracking
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)&&(PosMouse.x>640)&&(PosMouse.x<760)&&(PosMouse.y>0)&&(PosMouse.y<120)){
+		//printf("\n\n\n OK \n\n\n");
+		if (tracking){ tracking = 0;}
+		else tracking = 1;
+	}
+
+	//printf("Pos Mouse : %d %d \n", PosMouse.x, PosMouse.y);
+	
+	//Dessin du bouton
+	sf::CircleShape button(20, 100);
+	button.setPosition(sf::Vector2f(width+20, 20));
+
+	if(tracking){ button.setFillColor(sf::Color::Green); }
+	else{ button.setFillColor(sf::Color::Red); }
+
+	window.draw(button);
+
+
+	//Ajout du texte
+	sf::Font font;
+	if (!font.loadFromFile("Stock SFML/arial.ttf")){
+    		printf("Erreur chargement police SFML\n" );
                 break;
 	}
+
+	sf::Text text;
+	// choix de la police à utiliser
+	text.setFont(font); // font est un sf::Font
+
+	// choix de la chaîne de caractères à afficher
+	text.setString("Hello world");
+
+	// choix de la taille des caractères
+	text.setCharacterSize(24); // exprimée en pixels, pas en points !
+
+	//text.setFillColor(sf::Color::Black);
+	text.setColor(sf::Color::Black);
+
+	text.setPosition(sf::Vector2f(width+40, 20));
 	
-	sf::Sprite sprite;
-	sprite.setTexture(texture);
-
-	sprite.setPosition(sf::Vector2f(width, 0));
-
-	window.draw(sprite);
 	
-	sf::Vector2i PosMouse = sf::Mouse::getPosition(window);
-
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)&&(PosMouse.x>640)&&(PosMouse.x<760)&&(PosMouse.y>0)&&(PosMouse.y<120)){
-		printf("\n\n\n OK \n\n\n");
-	}
-
-	printf("Pos Mouse : %d %d \n", PosMouse.x, PosMouse.y);
+	window.draw(text);
 
 	/* Update the window */
         window.display();
 
 #endif
-
+/*
+	if(tracking){
 		//Mouvements moteurs
 		printf("-PREMAJ_ANGLE...: %d %d\n",width,height);
 
@@ -208,6 +239,8 @@ int main(int argc, char* argv[])
 		controle_moteur(angle); 
 
 		cvWaitKey(100);
+	}
+*/
 
 #ifdef CONFIG
 		affichage_config(frame, hsv_frame, threshold); //Affichage du flux vidéo et de ses traitements
@@ -327,13 +360,13 @@ void traitement(IplImage* frame, IplImage* HSV, IplImage* Binaire, int LowH, int
 
 	//Binarisation
 
-	CvScalar valinf={LowH,LowS,LowV};
-	CvScalar valsup={HighH,HighS,HighV};
+	//CvScalar valinf={LowH,LowS,LowV};
+	//CvScalar valsup={HighH,HighS,HighV};
 
+        //cvInRangeS(HSV, valinf,valsup, Binaire);
+	
 	//En cas d'erreur sur les trois ligne précédentes
-        cvInRangeS(HSV, valinf,valsup, Binaire);
-
-	//cvInRangeS(HSV, CvScalar(LowH,LowS,LowV),CvScalar(HighH,HighS,HighV), Binaire);
+	cvInRangeS(HSV, CvScalar(LowH,LowS,LowV),CvScalar(HighH,HighS,HighV), Binaire);
       
         //cvSmooth( Binaire, Binaire, CV_GAUSSIAN, 9, 9 ); //Legère suppression des parasites
 }
