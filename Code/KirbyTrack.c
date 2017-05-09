@@ -10,8 +10,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-//#define CONFIG
-#define SFML
+#define CONFIG
+//#define SFML
 
 #define KIRBY
 //#define ETOILE
@@ -19,9 +19,9 @@
 //ATTENTION AFFICHAGE OPENCV INCOMPATIBLE AVEC AFFICHAGE SFML
 
 /*Headers*/
-void maj_angle(int vecX, int vecY, int rayon, int* angle); //Met à jour l'angle selon la distance CentreCamera - Cible
-int ajust_pos(int pos, int ref)
-void controle_moteur(int* angle);//Envoie les angles au moteur
+void maj_angle(int vecX, int vecY, int rayon, double* angle); //Met à jour l'angle selon la distance CentreCamera - Cible
+int ajust_pos(int pos, int ref);
+void controle_moteur(double* angle);//Envoie les angles au moteur
 int limite_moteur(int val_pwm);//Verifie que les valeurs envoyees aux moteurs sont correctes
 
 void config(int* LowH, int* HighH, int* LowS, int* HighS, int* LowV, int* HighV); //Affiche le panneau de configuration de tracking avec les arguments comme valeur de base
@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 	int posX, posY; //Position objet
 	int boucle;
 
-	int angle[2] = {100,100};
+	double angle[2] = {100,100};
 	int vecX, vecY;
 
 
@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
   //Controle couleur
 #ifdef KIRBY
 	//Setup Kirby
-	int iLowH = 139;
+	int iLowH = 152;
 	int iHighH = 179;
 
 	int iLowS = 48; 
@@ -117,7 +117,6 @@ int main(int argc, char* argv[])
 	boucle = 1;
 #endif
 	 
-<<<<<<< HEAD
     while(boucle)
     { 
 
@@ -185,9 +184,9 @@ int main(int argc, char* argv[])
 		//Mouvements moteurs
 		printf("-PREMAJ_ANGLE...: %d %d\n",width,height);
 
-		maj_angle(ajust_pos(posX-width/2,width), ajust_pos(posY-height/2,height), height/10, angle);
+		maj_angle(ajust_pos(posX-width/2,width), ajust_pos(posY-height/2,height), height/8, angle);
 		controle_moteur(angle); 
-		cvWaitKey(50);
+		cvWaitKey(100);
 
 #ifdef CONFIG
 		affichage_config(frame, hsv_frame, threshold); //Affichage du flux vidéo et de ses traitements
@@ -210,17 +209,18 @@ int main(int argc, char* argv[])
 }
 
 
-void maj_angle(int vecX, int vecY, int rayon, int* angle){
+void maj_angle(int vecX, int vecY, int rayon, double* angle){
 	//On ajustera coeff fonction du rayon. Si la cible est à une distance 5*r, il sera 5x plus rapide que s'il était à 1*r
 
-	int coeffx, coeffy, l0, l1;
+	double coeffx, coeffy;
+	int l0, l1;
 
-	printf("-MAJ_ANGLE...Valeur maj_angle arguments : %d %d %d\n\tAnciens angles : %d %d\n\t",vecX,vecY,rayon,angle[0],angle[1]);
+	printf("-MAJ_ANGLE...Valeur maj_angle arguments : %d %d %d\n\tAnciens angles : %d %d\n\t",vecX,vecY,rayon,(int)angle[0],(int)angle[1]);
 
 
 	//Ajout d'un angle moteur pondéré par la distance
-	coeffx = vecX/rayon;
-	coeffy = vecY/rayon;
+	coeffx = 0.4*vecX/rayon;
+	coeffy = 0.4*vecY/rayon;
 	angle[0] += coeffx;
 	angle[1] += coeffy;
 
@@ -230,7 +230,7 @@ void maj_angle(int vecX, int vecY, int rayon, int* angle){
 	if (l0 != 0) angle[0] = l0;
 	if (l1 != 0) angle[1] = l1;
 
-	printf("Nouveaux angles : %d %d\n",angle[0],angle[1]);
+	printf("Nouveaux angles : %lf %lf %d %d\n",angle[0],angle[1],(int)angle[0],(int)angle[0]);
 }
 
 int ajust_pos(int pos, int ref){
@@ -251,7 +251,7 @@ int limite_moteur(int val_pwm){
 	}
 }
 
-void controle_moteur(int* angle){
+void controle_moteur(double* angle){
 
 	//Ouverture port serie
 	FILE* fichier = NULL;
@@ -263,25 +263,13 @@ void controle_moteur(int* angle){
 	}
 
 	//Ecriture angles
-	fprintf(fichier,"%d\n",angle[0]);
-	fprintf(fichier,"%d\n",angle[1]);
+	fprintf(fichier,"%d\n",(int)angle[0]);
+	fprintf(fichier,"%d\n",(int)angle[1]);
 
 	//Fermeture
 	fclose(fichier);
 	return;
 }
-
-/*Verifie que les valeurs envoyees aux moteurs sont correctes*/
-int limite_moteur(int val_pwm){
-	int MAX_PWM = 255;
-	if (val_pwm > MAX_PWM || val_pwm < 0){
-		return 0;
-	}
-	else{
-		return 1;
-	}
-}
-
 
 int image_CV2SFML(IplImage* imcv, sf::Image imFlux){
 	
