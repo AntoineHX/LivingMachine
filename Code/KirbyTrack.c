@@ -19,8 +19,9 @@
 //ATTENTION AFFICHAGE OPENCV INCOMPATIBLE AVEC AFFICHAGE SFML
 
 /*Headers*/
-void controle_moteur(int vecX, int vecY, int rayon);
-int limite_moteur(int val_pwm);
+void maj_angle(int vecX, int vecY, int rayon, int* angle); //Met à jour l'angle selon la distance CentreCamera - Cible
+void controle_moteur(int* angle);//Envoie les angles au moteur
+int limite_moteur(int val_pwm);//Verifie que les valeurs envoyees aux moteurs sont correctes
 
 void config(int* LowH, int* HighH, int* LowS, int* HighS, int* LowV, int* HighV); //Affiche le panneau de configuration de tracking avec les arguments comme valeur de base
 void affichage_config(IplImage* frame, IplImage* HSV, IplImage* Binaire); //Affiche le flux vidéos et ses différent traitements
@@ -31,66 +32,69 @@ void traitement(IplImage* frame, IplImage* HSV, IplImage* Binaire, int LowH, int
 
 int image_CV2SFML(IplImage* imcv, sf::Image imFlux); //Construction de imsf (RGBA) à partir de imcv (BGR), avec alpha constant (=1)
 
+
 int main(int argc, char* argv[])
 {
+	//Initialisations 
 	int height,width,step,channels;  //parameters of the image we are working on
 	int posX, posY; //Position objet
 	int boucle;
-	
-#ifdef SFML
 
+	int angle[2] = {100,100};
+
+
+#ifdef SFML
 	//Initialisation SFML
 	
 	sf::Texture txFlux;
 	sf::Sprite spFlux;
 	sf::Image imFlux;
-   	sf::Event event;
+  sf::Event event;
 	
 #endif
 
-    // Open capture device. 0 is /dev/video0, 1 is /dev/video1, etc.
-    CvCapture* capture = cvCaptureFromCAM( 0 );
+  //Ouverture flux camera
+  CvCapture* capture = cvCaptureFromCAM( 0 );
     
-    if( !capture ){
-            printf("ERROR: capture is NULL \n" );
-            return EXIT_FAILURE;
-    }
+  if( !capture ){
+  	printf("ERROR: capture is NULL \n" );
+  	exit(EXIT_FAILURE);
+  }
     
 
-    // grab an image from the capture
-    IplImage* frame = cvQueryFrame( capture );
+  // grab an image from the capture
+  IplImage* frame = cvQueryFrame( capture );
     
-    // get the image data
-      height    = frame->height;
-      width     = frame->width;
-      step      = frame->widthStep;
+  // get the image data
+  height    = frame->height;
+  width     = frame->width;
+  step      = frame->widthStep;
       
      // capture size - 
     CvSize size = cvSize(width,height);
   
-
 
 #ifdef SFML
 	//Création de la fenetre principale
 	sf::RenderWindow window(sf::VideoMode(width, height), "KirbyTrack");
 #endif
 
-
     // Initialize different images that are going to be used in the program
     IplImage*  hsv_frame    = cvCreateImage(size, IPL_DEPTH_8U, 3); // image converted to HSV plane
     IplImage*  threshold   = cvCreateImage(size, IPL_DEPTH_8U, 1);
+
     
-    //Controle couleur
+  //Controle couleur
 #ifdef KIRBY
 	//Setup Kirby
-	 int iLowH = 139;
-	 int iHighH = 179;
+	int iLowH = 139;
+	int iHighH = 179;
 
-	 int iLowS = 48; 
-	 int iHighS = 255;
+	int iLowS = 48; 
+	int iHighS = 255;
 
-	 int iLowV = 101;
-	 int iHighV = 255;
+	int iLowV = 101;
+	int iHighV = 255;
 #endif
 #ifdef ETOILE
 	//Setup Etoile
@@ -111,37 +115,38 @@ int main(int argc, char* argv[])
 	boucle = 1;
 #endif
 	 
+<<<<<<< HEAD
     while(boucle)
-    {  
+    { 
 
 #ifdef SFML
-	boucle = window.isOpen();
+		boucle = window.isOpen();
 
-	// on inspecte tous les évènements de la fenêtre qui ont été émis depuis la précédente itération
-        while (window.pollEvent(event))
-        {
-            // évènement "fermeture demandée" : on ferme la fenêtre
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
+		// on inspecte tous les évènements de la fenêtre qui ont été émis depuis la précédente itération
+		while (window.pollEvent(event))
+		{
+			// évènement "fermeture demandée" : on ferme la fenêtre
+			if (event.type == sf::Event::Closed)
+		              window.close();
+		}
 #endif
 
-        // Get one frame
-        frame = cvQueryFrame( capture );
-        
-        if( !frame ){
-                printf("ERROR: frame is null...\n" );
-                break;
-        }
+		// Get one frame
+		frame = cvQueryFrame( capture );
+		      
+		if( !frame ){
+			perror("ERROR: frame is null...");
+			break;
+		}
 
- 	//Binarisation du flux vidéo
-	traitement(frame, hsv_frame, threshold, iLowH, iHighH, iLowS, iHighS, iLowV, iHighV);
-        
-        // Calculate the moments to estimate the position of the ball 
-        Position_moy(threshold, &posX, &posY);
-        
-	//Dessine les informations de tracking sur frame
-	Affichage_Tracking(frame, posX, posY, width, height);
+	 	//Binarisation du flux vidéo
+		traitement(frame, hsv_frame, threshold, iLowH, iHighH, iLowS, iHighS, iLowV, iHighV);
+		      
+		// Calculate the moments to estimate the position of the ball 
+		Position_moy(threshold, &posX, &posY);
+		      
+		//Dessine les informations de tracking sur frame
+		Affichage_Tracking(frame, posX, posY, width, height);
 
 
 #ifdef SFML
@@ -166,68 +171,92 @@ int main(int argc, char* argv[])
 
 	spFlux.setTexture(txFlux);
 
-   	window.draw(spFlux);
+
+		window.draw(spFlux);
 	
+
 	/* Update the window */
         window.display();
 
 #endif
 
-	//controle_moteur(posX-width/2, posY-height/2, height/6); //Envoie commande moteur
+		//Mouvements moteurs
+		printf("-PREMAJ_ANGLE...: %d %d\n",width,height);
+		maj_angle(posX-width/2, posY-height/2, height/6, angle);
+		controle_moteur(angle); 
+		cvWaitKey(50);
 
 #ifdef CONFIG
-	affichage_config(frame, hsv_frame, threshold); //Affichage du flux vidéo et de ses traitements
+		affichage_config(frame, hsv_frame, threshold); //Affichage du flux vidéo et de ses traitements
 	
-        if( (cvWaitKey(10) ) >= 0 ) break; //Arret capture
+		if( (cvWaitKey(10) ) >= 0 ) break; //Arret capture
 #endif
-    }
+
+	}
     
 	//cvWaitKey(0); //Fin programme
 	
-     // Release the capture device housekeeping
-     cvReleaseCapture( &capture );
+	// Release the capture device housekeeping
+	cvReleaseCapture( &capture );
      
-     cvReleaseImage(&threshold);
-     cvReleaseImage(&hsv_frame);
-     cvReleaseImage(&frame);
+	cvReleaseImage(&threshold);
+	cvReleaseImage(&hsv_frame);
+	cvReleaseImage(&frame);
      
-     return EXIT_SUCCESS;
-   }
+	return EXIT_SUCCESS;
+}
 
-/*On se rapproche de (vecX, vecY) si la position se situe en dehors d'un cercle centre sur la camera*/
-void controle_moteur(int vecX, int vecY, int rayon){
 
-	int val_pwm[2];
+void maj_angle(int vecX, int vecY, int rayon, int* angle){
+	//On ajustera coeff fonction du rayon. Si la cible est à une distance 5*r, il sera 5x plus rapide que s'il était à 1*r
+//double norme = 1.0*vecX*vecX + 1.0*vecY*vecY;
+	int coeffx = vecX/rayon, coeffy = vecY/rayon, l0, l1; 
+	printf("-MAJ_ANGLE...Valeur maj_angle arguments : %d %d %d\n\tAnciens angles : %d %d\n\t",vecX,vecY,rayon,angle[0],angle[1]);
+//	if (norme > rayon*rayon){ //Si la cible est en dehors d'un certain rayon
 
-	/*Lecture valeur*/
-	FILE* fichier = NULL;
-	fichier = fopen("/dev/ttyACM0","r");
-	if(fichier==NULL){
-		printf("Erreur ouverture fichier\n");
-		return ;
+		//Ajout d'un angle moteur pondéré par la distance
+		angle[0] += coeffx;
+		angle[1] += coeffy;
+
+		//Majoration - minoration des angles moteurs
+		l0 = limite_moteur(angle[0]);
+		l1 = limite_moteur(angle[1]);
+		if (l0 != 0) angle[0] = l0;
+		if (l1 != 0) angle[1] = l1;
+	//}
+
+		printf("Nouveaux angles : %d %d\n",angle[0],angle[1]);
+}
+
+int limite_moteur(int val_pwm){
+	int MAX_PWM = 130, MIN_PWM = 30;
+	if (val_pwm > MAX_PWM){ 
+		return MAX_PWM;
 	}
-	
-	fscanf(fichier,"%d,%d",&val_pwm[0],&val_pwm[1]);
-	
-	fclose(fichier);
+	else if (val_pwm < MIN_PWM){
+		return MIN_PWM;
+	}
+	else{
+		return 0;
+	}
+}
 
-	/*Ecriture nouvelle valeur*/
+void controle_moteur(int* angle){
+
+	//Ouverture port serie
+	FILE* fichier = NULL;
 	fichier = fopen("/dev/ttyACM0","w");
 	if(fichier==NULL){
 		printf("Erreur ouverture fichier\n");
-		return ;
-	}
-	double norme = 1.0*vecX*vecX + 1.0*vecY*vecY;
-	
-	if (norme > rayon*rayon){
-		if(vecX >= vecY && limite_moteur(val_pwm[0])){ /*Ecart sur x plus important*/
-			fprintf(fichier,"%d,%d",val_pwm[0]++,val_pwm[1]);
-		}
-		else if(vecX <= vecY && limite_moteur(val_pwm[1])){	/*Ecart sur y plus important*/
-			fprintf(fichier,"%d,%d",val_pwm[0],val_pwm[1]++);
-		}
+		perror("fopen failed for /dev/ttyACM0" );
+		exit( EXIT_FAILURE );
 	}
 
+	//Ecriture angles
+	fprintf(fichier,"%d\n",angle[0]);
+	fprintf(fichier,"%d\n",angle[1]);
+
+	//Fermeture
 	fclose(fichier);
 	return;
 }
@@ -282,8 +311,9 @@ void traitement(IplImage* frame, IplImage* HSV, IplImage* Binaire, int LowH, int
 	CvScalar valinf={LowH,LowS,LowV};
 	CvScalar valsup={HighH,HighS,HighV};
 
-        cvInRangeS(HSV, valinf,valsup, Binaire);
 	//En cas d'erreur sur les trois ligne précédentes
+        cvInRangeS(HSV, valinf,valsup, Binaire);
+
 	//cvInRangeS(HSV, CvScalar(LowH,LowS,LowV),CvScalar(HighH,HighS,HighV), Binaire);
       
         //cvSmooth( Binaire, Binaire, CV_GAUSSIAN, 9, 9 ); //Legère suppression des parasites

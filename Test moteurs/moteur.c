@@ -13,6 +13,8 @@ int main(){
 	int angle[2] = {0,0};
 	int coeff = 1;
 
+	printf("COUCOCUOCUCOUC : %d %d %d\n",1/2, 2/3,5/2);
+
 	while(getchar() != 'q'){
 
 		//Ouverture tty
