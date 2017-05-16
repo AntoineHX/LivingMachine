@@ -9,12 +9,16 @@
 //#include <SFML/Window.h>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp> //inutilisé pour le moment
 
 //#define CONFIG
 #define SFML
 
 #define KIRBY
 //#define ETOILE
+
+#define JEU 0.15
 
 //ATTENTION AFFICHAGE OPENCV INCOMPATIBLE AVEC AFFICHAGE SFML
 
@@ -37,19 +41,18 @@ int image_CV2SFML(IplImage* imcv, sf::Image imFlux); //Construction de imsf (RGB
 int main(int argc, char* argv[])
 {
 	//Initialisations 
-	int height,width,step,channels;  //parameters of the image we are working on
+	int height,width;  //parameters of the image we are working on
 	int posX, posY; //Position objet
 	int boucle;
 
 	double angle[2] = {100,100};
-	int vecX, vecY;
 
 	int tracking;
 
 
 #ifdef SFML
 	//Initialisation SFML
-	
+
 	sf::Texture txFlux;
 	sf::Sprite spFlux;
 	sf::Image imFlux;
@@ -74,7 +77,6 @@ int main(int argc, char* argv[])
   // get the image data
   height    = frame->height;
   width     = frame->width;
-  step      = frame->widthStep;
       
      // capture size - 
     CvSize size = cvSize(width,height);
@@ -187,20 +189,45 @@ int main(int argc, char* argv[])
 		//printf("\n\n\n OK \n\n\n");
 		if (tracking){ tracking = 0;}
 		else tracking = 1;
+		cvWaitKey(100);
 	}
-
 	//printf("Pos Mouse : %d %d \n", PosMouse.x, PosMouse.y);
+/*
+	//Dessin du bouton de tracking
+	sf::Texture txBut;
+	sf::Sprite button_tracking;
 	
-	//Dessin du bouton
-	sf::CircleShape button(20, 100);
-	button.setPosition(sf::Vector2f(width+20, 20));
+	if (!txBut.loadFromFile("Stock SFML/button.png")){
+		printf("Erreur chargement image SFML\n" );
+                break;
+	}
+	
+	button_tracking.setTexture(txBut);
+	button_tracking.setScale(0.5,0.5);
+	button_tracking.setPosition(sf::Vector2f(width+20, 20));
 
-	if(tracking){ button.setFillColor(sf::Color::Green); }
-	else{ button.setFillColor(sf::Color::Red); }
+	if(tracking){ button_tracking.setColor(sf::Color::Green); }
+	else{ button_tracking.setColor(sf::Color::Red); }
 
-	window.draw(button);
+	window.draw(button_tracking);
 
+*/
+/*
+	//Dessin du bouton reset
+	sf::Texture txBut2;
+	sf::Sprite button_reset;
 
+	if (!txBut2.loadFromFile("Stock SFML/button.png")){
+		printf("Erreur chargement image SFML\n" );
+                break;
+	}
+	
+	button_reset.setTexture(txBut2);
+	button_reset.setScale(0.5,0.5);
+	button_reset.setPosition(sf::Vector2f(width+20, 60));
+
+	window.draw(button_reset);
+*/
 	//Ajout du texte
 	sf::Font font;
 	if (!font.loadFromFile("Stock SFML/arial.ttf")){
@@ -213,7 +240,7 @@ int main(int argc, char* argv[])
 	text.setFont(font); // font est un sf::Font
 
 	// choix de la chaîne de caractères à afficher
-	text.setString("Hello world");
+	text.setString("Tracking Moteur");
 
 	// choix de la taille des caractères
 	text.setCharacterSize(24); // exprimée en pixels, pas en points !
@@ -221,26 +248,39 @@ int main(int argc, char* argv[])
 	//text.setFillColor(sf::Color::Black);
 	text.setColor(sf::Color::Black);
 
-	text.setPosition(sf::Vector2f(width+40, 20));
-	
+	text.setPosition(sf::Vector2f(width+100, 35));
 	
 	window.draw(text);
+/*
+	//Link
+	sf::Texture txLink;
+	sf::Sprite Link;
+	
+	if (!txLink.loadFromFile("Stock SFML/link.png")){
+		printf("Erreur chargement image SFML\n" );
+                break;
+	}
+	
+	Link.setTexture(txLink);
+	Link.setPosition(sf::Vector2f(posX-75, posY-75));
 
+	window.draw(Link);
+*/
 	/* Update the window */
         window.display();
 
 #endif
-/*
+
 	if(tracking){
 		//Mouvements moteurs
-		printf("-PREMAJ_ANGLE...: %d %d\n",width,height);
+		//printf("-PREMAJ_ANGLE...: %d %d\n",width,height);
 
-		maj_angle(ajust_pos(posX-width/2,width), ajust_pos(posY-height/2,height), height/8, angle);
+		maj_angle(ajust_pos(posX-width/2,width), ajust_pos(posY-height/2,height), height*JEU, angle);
 		controle_moteur(angle); 
 
-		cvWaitKey(100);
+		cvWaitKey(50);
 	}
-*/
+
 
 #ifdef CONFIG
 		affichage_config(frame, hsv_frame, threshold); //Affichage du flux vidéo et de ses traitements
@@ -269,12 +309,12 @@ void maj_angle(int vecX, int vecY, int rayon, double* angle){
 	double coeffx, coeffy;
 	int l0, l1;
 
-	printf("-MAJ_ANGLE...Valeur maj_angle arguments : %d %d %d\n\tAnciens angles : %d %d\n\t",vecX,vecY,rayon,(int)angle[0],(int)angle[1]);
+	//printf("-MAJ_ANGLE...Valeur maj_angle arguments : %d %d %d\n\tAnciens angles : %d %d\n\t",vecX,vecY,rayon,(int)angle[0],(int)angle[1]);
 
 
 	//Ajout d'un angle moteur pondéré par la distance
-	coeffx = 0.4*vecX/rayon;
-	coeffy = 0.4*vecY/rayon;
+	coeffx = -0.2*vecX/rayon;
+	coeffy = 0.2*vecY/rayon;
 	angle[0] += coeffx;
 	angle[1] += coeffy;
 
@@ -284,7 +324,7 @@ void maj_angle(int vecX, int vecY, int rayon, double* angle){
 	if (l0 != 0) angle[0] = l0;
 	if (l1 != 0) angle[1] = l1;
 
-	printf("Nouveaux angles : %lf %lf %d %d\n",angle[0],angle[1],(int)angle[0],(int)angle[0]);
+	//printf("Nouveaux angles : %lf %lf %d %d\n",angle[0],angle[1],(int)angle[0],(int)angle[0]);
 }
 
 int ajust_pos(int pos, int ref){
@@ -360,13 +400,13 @@ void traitement(IplImage* frame, IplImage* HSV, IplImage* Binaire, int LowH, int
 
 	//Binarisation
 
-	//CvScalar valinf={LowH,LowS,LowV};
-	//CvScalar valsup={HighH,HighS,HighV};
+	CvScalar valinf={(double)LowH,(double)LowS,(double)LowV};
+	CvScalar valsup={(double)HighH,(double)HighS,(double)HighV};
 
-        //cvInRangeS(HSV, valinf,valsup, Binaire);
+        cvInRangeS(HSV, valinf,valsup, Binaire);
 	
 	//En cas d'erreur sur les trois ligne précédentes
-	cvInRangeS(HSV, CvScalar(LowH,LowS,LowV),CvScalar(HighH,HighS,HighV), Binaire);
+	//cvInRangeS(HSV, CvScalar(LowH,LowS,LowV),CvScalar(HighH,HighS,HighV), Binaire);
       
         //cvSmooth( Binaire, Binaire, CV_GAUSSIAN, 9, 9 ); //Legère suppression des parasites
 }
@@ -417,7 +457,7 @@ void affichage_config(IplImage* frame, IplImage* HSV, IplImage* Binaire){ //Affi
 void Affichage_Tracking(IplImage* frame, int posX, int posY, int width, int height){ //Dessine les informations de tracking sur frame
 
 	//Affichage zone suivie objet
-        cvCircle(frame, cvPoint(width/2,height/2), height/6, CV_RGB(0, 255, 0), 4, 8, 0 );
+        cvCircle(frame, cvPoint(width/2,height/2), height*JEU, CV_RGB(0, 255, 0), 4, 8, 0 );
 
 	if(posX<5&&posY<5){ //Si aucun objet spotted, pointeur rouge au centre
 		posX=width/2;
