@@ -21,6 +21,7 @@
 #define JEU 0.15
 
 //ATTENTION AFFICHAGE OPENCV INCOMPATIBLE AVEC AFFICHAGE SFML
+//ATTENTION SFML SUPPORTE UN NOMBRE LIMITE DE SPRITE EN FCT DU PC
 
 /*Headers*/
 void maj_angle(int vecX, int vecY, int rayon, double* angle); //Met à jour l'angle selon la distance CentreCamera - Cible
