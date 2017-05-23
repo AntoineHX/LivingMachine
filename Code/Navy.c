@@ -81,7 +81,9 @@ int main(int argc, char* argv[])
 			break;
 		}
 
-		detect_and_draw(frame,cascade);
+		
+		pface tab_face[2];
+		detect_and_draw(frame,cascade,tab_face);
 
 #ifdef SFML
 	//Affichage SFML
@@ -137,7 +139,6 @@ int main(int argc, char* argv[])
 
 	window.draw(button_tracking);
 
-/*
 	//Dessin du bouton reset
 	sf::Texture txBut2;
 	sf::Sprite button_reset;
@@ -149,10 +150,11 @@ int main(int argc, char* argv[])
 	
 	button_reset.setTexture(txBut2);
 	button_reset.setScale(0.5,0.5);
-	button_reset.setPosition(sf::Vector2f(width+20, 60));
+	button_reset.setPosition(sf::Vector2f(width+20, 100));
 
 	window.draw(button_reset);
-*/
+
+/*
 	//Ajout du texte
 	sf::Font font;
 	if (!font.loadFromFile("Stock SFML/arial.ttf")){
@@ -176,6 +178,7 @@ int main(int argc, char* argv[])
 	text.setPosition(sf::Vector2f(width+100, 35));
 	
 	window.draw(text);
+*/
 /*
 	//Link
 	sf::Texture txLink;
@@ -195,7 +198,7 @@ int main(int argc, char* argv[])
         window.display();
 #endif
 
-
+/*
 	if(tracking){
 		//Mouvements moteurs
 		//printf("-PREMAJ_ANGLE...: %d %d\n",width,height);
@@ -205,7 +208,7 @@ int main(int argc, char* argv[])
 
 		cvWaitKey(50);
 	}
-
+*/
 
 #ifdef CONFIG
 		/*

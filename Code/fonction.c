@@ -189,11 +189,8 @@ CvHaarClassifierCascade* init_cascade(){
 }
 
 // Function to detect and draw any faces that is present in an image
-void detect_and_draw( IplImage* img, CvHaarClassifierCascade* cascade )
+void detect_and_draw( IplImage* img, CvHaarClassifierCascade* cascade, pface* tab_face)
 {
-
-	pface* tab_face[2];
-
 
 	// Create memory for calculations
 	static CvMemStorage* storage = 0;
@@ -237,11 +234,12 @@ void detect_and_draw( IplImage* img, CvHaarClassifierCascade* cascade )
 			cvRectangle( img, pt1, pt2, CV_RGB(255,0,0), 3, 8, 0 );
 
 			if(i < MAX_FACE){
-				tab_face[i]->point = 
+				tab_face[i]->point.x = (pt1.x + pt2.x)/2;
+				tab_face[i]->point.y = (pt1.y + pt2.y)/2;
 				tab_face[i]->largeur = r->width;
+
+				printf("VALEURS FACES : %d %d %d\n",tab_face[i]->point.x,tab_face[i]->point.y,tab_face[i]->largeur);
 			}
-
-
 		}
 	}
 

@@ -1,3 +1,4 @@
+
 EXEC= KirbyTrack Navy
 
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio `pkg-config opencv --libs`

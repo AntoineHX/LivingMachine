@@ -33,9 +33,9 @@
 typedef struct _face{
 	CvPoint point;
 	int largeur;
-} face
+} face;
 
-typedef struct pface *face;
+typedef face* pface;
 
 
 /*HEADERS*/
@@ -54,7 +54,7 @@ void traitement(IplImage* frame, IplImage* HSV, IplImage* Binaire, int LowH, int
 int image_CV2SFML(IplImage* imcv, sf::Image imFlux); //Construction de imsf (RGBA) à partir de imcv (BGR), avec alpha constant (=1)
 
 CvHaarClassifierCascade* init_cascade();
-void detect_and_draw( IplImage* img, CvHaarClassifierCascade* cascade );
+void detect_and_draw( IplImage* img, CvHaarClassifierCascade* cascade, pface* tab_face );
 
 
 #endif
