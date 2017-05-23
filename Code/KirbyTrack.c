@@ -41,7 +41,6 @@ int main(int argc, char* argv[])
 	double angle[2] = {100,100};
 
 	int tracking; //0 = tracking OFF
-, 1 = ON
 
 
 #ifdef SFML
