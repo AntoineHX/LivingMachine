@@ -2,10 +2,15 @@
 #include <stdlib.h>
 #include <cv.h> 
 #include <highgui.h>
+//#include <opencv2/highgui.hpp> //Pour le cvRound
+//#include "opencv2/videoio/videoio_c.h" //Pour le CvCapture*
 
+//#include <cxcore.h>
+//#include <SFML/Window.h>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/System.hpp> //inutilisé pour le moment
 
 //#define CONFIG
 #define SFML
@@ -31,6 +36,9 @@ void Affichage_Tracking(IplImage* frame, int posX, int posY, int width, int heig
 void Position_moy(IplImage* Binaire, int* posX, int * posY); //Effectue le baricentre des pixels d'une image binaire pour obtenir la postion de l'objet
 void traitement(IplImage* frame, IplImage* HSV, IplImage* Binaire, int LowH, int HighH, int LowS, int HighS, int LowV, int HighV); //Effectue une binarisation de frame en fonction des bornes HSV
 
+int image_CV2SFML(IplImage* imcv, sf::Image imFlux); //Construction de imsf (RGBA) à partir de imcv (BGR), avec alpha constant (=1)
+
+
 int main(int argc, char* argv[])
 {
 	//Initialisations 
@@ -40,8 +48,7 @@ int main(int argc, char* argv[])
 
 	double angle[2] = {100,100};
 
-	int tracking; //0 = tracking OFF
-, 1 = ON
+	int tracking;
 
 
 #ifdef SFML
@@ -152,13 +159,16 @@ int main(int argc, char* argv[])
 
 
 #ifdef SFML
-//Affichage SFML
+	//Affichage SFML
 	/* Clear the screen */
         window.clear(sf::Color::White);	
 
-//Affichage de la frame
-
-	//Le chargement pourrait etre plus optimisé en créant nous me l'image SFML en parcourant l'IplImage
+	//Conversion de la frame en image smfl
+	/*if(image_CV2SFML(frame, imFlux)){
+		printf("Erreur conversion OpenCV-SFML\n");
+		break;
+	}
+     	*/
 
 	//Enregistrement de la frame openCV
 	cvSaveImage("Stock SFML/temp.jpg", frame);
@@ -170,11 +180,12 @@ int main(int argc, char* argv[])
 	}
 
 	spFlux.setTexture(txFlux);
+
 	window.draw(spFlux);
 
-
+//TEST SFML
 	sf::Vector2i PosMouse = sf::Mouse::getPosition(window);
-//Detection du bouton tracking
+	//Detection du bouton tracking
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)&&(PosMouse.x>640)&&(PosMouse.x<760)&&(PosMouse.y>0)&&(PosMouse.y<120)){
 		//printf("\n\n\n OK \n\n\n");
 		if (tracking){ tracking = 0;}
@@ -183,7 +194,7 @@ int main(int argc, char* argv[])
 	}
 	//printf("Pos Mouse : %d %d \n", PosMouse.x, PosMouse.y);
 
-//Dessin du bouton de tracking
+	//Dessin du bouton de tracking
 	sf::Texture txBut;
 	sf::Sprite button_tracking;
 	
@@ -201,7 +212,23 @@ int main(int argc, char* argv[])
 
 	window.draw(button_tracking);
 
-//Ajout du texte
+/*
+	//Dessin du bouton reset
+	sf::Texture txBut2;
+	sf::Sprite button_reset;
+
+	if (!txBut2.loadFromFile("Stock SFML/button.png")){
+		printf("Erreur chargement image SFML\n" );
+                break;
+	}
+	
+	button_reset.setTexture(txBut2);
+	button_reset.setScale(0.5,0.5);
+	button_reset.setPosition(sf::Vector2f(width+20, 60));
+
+	window.draw(button_reset);
+*/
+	//Ajout du texte
 	sf::Font font;
 	if (!font.loadFromFile("Stock SFML/arial.ttf")){
     		printf("Erreur chargement police SFML\n" );
@@ -224,12 +251,26 @@ int main(int argc, char* argv[])
 	text.setPosition(sf::Vector2f(width+100, 35));
 	
 	window.draw(text);
+/*
+	//Link
+	sf::Texture txLink;
+	sf::Sprite Link;
+	
+	if (!txLink.loadFromFile("Stock SFML/link.png")){
+		printf("Erreur chargement image SFML\n" );
+                break;
+	}
+	
+	Link.setTexture(txLink);
+	Link.setPosition(sf::Vector2f(posX-75, posY-75));
 
+	window.draw(Link);
+*/
 	/* Update the window */
         window.display();
 
 #endif
-//Envoie données moteurs
+
 	if(tracking){
 		//Mouvements moteurs
 		//printf("-PREMAJ_ANGLE...: %d %d\n",width,height);
@@ -248,6 +289,8 @@ int main(int argc, char* argv[])
 #endif
 
 	}
+    
+	//cvWaitKey(0); //Fin programme
 	
 	// Release the capture device housekeeping
 	cvReleaseCapture( &capture );
@@ -321,6 +364,31 @@ void controle_moteur(double* angle){
 	fclose(fichier);
 	return;
 }
+
+int image_CV2SFML(IplImage* imcv, sf::Image imFlux){
+	
+	int R, G, B;
+	int w = imcv->widthStep;
+	char* ptr = imcv->imageData;
+
+	imFlux.create(imcv->width,imcv->height, NULL); //Initialise une image vide
+
+	for( int y=0; y<imcv->height; y++ ) { 
+        	//uchar* ptr = (uchar*) ( imcv->imageData + y * imcv->widthStep );
+        	for( int x=0; x<imcv->width; x++ ) { 
+            		//Recupération du pixel
+			B = ptr[y*w + 3*x];
+			G = ptr[y*w + 3*x + 1]; 
+			R = ptr[y*w + 3*x + 2];
+
+			//Ecriture du pixel associé
+			imFlux.setPixel(x,y,sf::Color(R,G,B,1)); //Alpha channel = 1
+        	}
+    	}
+
+	return 0;
+}
+
 
 void traitement(IplImage* frame, IplImage* HSV, IplImage* Binaire, int LowH, int HighH, int LowS, int HighS, int LowV, int HighV){ //Effectue une binarisation de frame en fonction des bornes HSV
 
