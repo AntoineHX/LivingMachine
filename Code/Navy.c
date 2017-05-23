@@ -212,7 +212,6 @@ int main(int argc, char* argv[])
 
 	window.draw(button_tracking);
 
-/*
 	//Dessin du bouton reset
 	sf::Texture txBut2;
 	sf::Sprite button_reset;
@@ -224,10 +223,11 @@ int main(int argc, char* argv[])
 	
 	button_reset.setTexture(txBut2);
 	button_reset.setScale(0.5,0.5);
-	button_reset.setPosition(sf::Vector2f(width+20, 60));
+	button_reset.setPosition(sf::Vector2f(width+20, 100));
 
 	window.draw(button_reset);
-*/
+
+/*
 	//Ajout du texte
 	sf::Font font;
 	if (!font.loadFromFile("Stock SFML/arial.ttf")){
@@ -251,6 +251,7 @@ int main(int argc, char* argv[])
 	text.setPosition(sf::Vector2f(width+100, 35));
 	
 	window.draw(text);
+*/
 /*
 	//Link
 	sf::Texture txLink;
