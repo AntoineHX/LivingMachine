@@ -43,6 +43,11 @@ int main(int argc, char* argv[])
   	sf::Event event;
 
 	tracking = 0; //Pas de tracking de base en mode SFML
+
+
+	sf::Music aye;
+	if (!aye.openFromFile("Stock SFML/Aye Sir.ogg"))
+    		return EXIT_FAILURE; // erreur
 	
 #endif
 
@@ -169,17 +174,22 @@ int main(int argc, char* argv[])
 		//printf("\n\n\n OK \n\n\n");
 		if (tracking){ tracking = 0;}
 		else tracking = 1;
+
+		aye.play();
+
 		cvWaitKey(100);
 	}
 
 //Detection du bouton reset
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)&&(PosMouse.x>640)&&(PosMouse.x<760)&&(PosMouse.y>110)&&(PosMouse.y<160)){
-		//printf("\n\n\n OK \n\n\n");
+
 		tracking = 0;
 		//Reset Position moteur
 		angle[0]=0; //ANGLES A VERIFIER
 		angle[1]=0;
 		controle_moteur(angle); 
+
+		aye.play();
 
 		cvWaitKey(100);
 	}
