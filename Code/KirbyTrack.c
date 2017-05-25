@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 	//Initialisations 
 	int height,width;  //parameters of the image we are working on
 	int posX, posY; //Position objet
-	int boucle;
+	int boucle = 1; //On effectuera la boucle principale au moins une fois
 
 	double angle[2] = {100,100};
 
@@ -44,10 +44,30 @@ int main(int argc, char* argv[])
 
 	tracking = 0; //Pas de tracking de base en mode SFML
 
+	//Chargement boutons
+	sf::Texture txBut;
+	sf::Sprite button_tracking;
+	sf::Sprite button_reset;
+	
+	if (!txBut.loadFromFile("Stock SFML/button.png")){
+		printf("Erreur chargement image SFML\n" );
+                return EXIT_FAILURE;
+	}
 
+	//Chargement texte
+	sf::Font font;
+	if (!font.loadFromFile("Stock SFML/arial.ttf")){
+    		printf("Erreur chargement police SFML\n" );
+                return EXIT_FAILURE;
+	}
+
+	sf::Text text_track;
+	sf::Text text_reset;
+
+	//Chargement son
 	sf::Music aye;
 	if (!aye.openFromFile("Stock SFML/Aye Sir.ogg"))
-    		return EXIT_FAILURE; // erreur
+    		return EXIT_FAILURE;
 	
 #endif
 
@@ -109,10 +129,9 @@ int main(int argc, char* argv[])
 	//Affichage du panneau de config
 	config(&iLowH, &iHighH, &iLowS, &iHighS, &iLowV, &iHighV);
 
-	boucle = 1;
 	tracking = 1; //Tracking de base en mode CONFIG
 #endif
-	 
+
     while(boucle)
     { 
 
@@ -127,7 +146,6 @@ int main(int argc, char* argv[])
 		              window.close();
 		}
 #endif
-
 		// Get one frame
 		frame = cvQueryFrame( capture );
 		      
@@ -144,7 +162,6 @@ int main(int argc, char* argv[])
 		      
 		//Dessine les informations de tracking sur frame
 		Affichage_Tracking(frame, posX, posY, width, height);
-
 
 #ifdef SFML
 //Affichage SFML
@@ -167,9 +184,41 @@ int main(int argc, char* argv[])
 	spFlux.setTexture(txFlux);
 	window.draw(spFlux);
 
+//Dessin des boutons
+	button_tracking.setTexture(txBut);
+	button_tracking.setScale(0.5,0.5);
+	button_tracking.setPosition(sf::Vector2f(width+20, 20));
+	
+	button_reset.setTexture(txBut);
+	button_reset.setScale(0.5,0.5);
+	button_reset.setPosition(sf::Vector2f(width+20, 100));
 
-	sf::Vector2i PosMouse = sf::Mouse::getPosition(window);
+	if(tracking){ button_tracking.setColor(sf::Color::Green); }
+	else{ button_tracking.setColor(sf::Color::Red); }
+
+//Ajout du texte
+	// choix de la police à utiliser
+	text_track.setFont(font); // font est un sf::Font
+	text_reset.setFont(font);
+
+	// choix de la chaîne de caractères à afficher
+	text_track.setString("Tracking Moteurs");
+	text_reset.setString("Reset Moteurs");
+
+	// choix de la taille des caractères
+	text_track.setCharacterSize(24); // exprimée en pixels, pas en points !
+	text_reset.setCharacterSize(24);
+
+	//text.setFillColor(sf::Color::Black);
+	text_track.setColor(sf::Color::Black);
+	text_reset.setColor(sf::Color::Black);
+
+	text_track.setPosition(sf::Vector2f(width+100, 35));
+	text_reset.setPosition(sf::Vector2f(width+100, 115));
+
+
 //Detection du bouton tracking
+sf::Vector2i PosMouse = sf::Mouse::getPosition(window);
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)&&(PosMouse.x>640)&&(PosMouse.x<760)&&(PosMouse.y>0)&&(PosMouse.y<110)){
 		//printf("\n\n\n OK \n\n\n");
 		if (tracking){ tracking = 0;}
@@ -195,62 +244,13 @@ int main(int argc, char* argv[])
 	}
 	//printf("Pos Mouse : %d %d \n", PosMouse.x, PosMouse.y);
 
-//Dessin des boutons
-	sf::Texture txBut;
-	sf::Sprite button_tracking;
-	sf::Sprite button_reset;
-	
-	if (!txBut.loadFromFile("Stock SFML/button.png")){
-		printf("Erreur chargement image SFML\n" );
-                break;
-	}
-	
-	button_tracking.setTexture(txBut);
-	button_tracking.setScale(0.5,0.5);
-	button_tracking.setPosition(sf::Vector2f(width+20, 20));
-	
-	button_reset.setTexture(txBut);
-	button_reset.setScale(0.5,0.5);
-	button_reset.setPosition(sf::Vector2f(width+20, 100));
 
-	if(tracking){ button_tracking.setColor(sf::Color::Green); }
-	else{ button_tracking.setColor(sf::Color::Red); }
-
+	/* Update the window */
 	window.draw(button_tracking);
 	window.draw(button_reset);
-
-//Ajout du texte
-	sf::Font font;
-	if (!font.loadFromFile("Stock SFML/arial.ttf")){
-    		printf("Erreur chargement police SFML\n" );
-                break;
-	}
-
-	sf::Text text_track;
-	sf::Text text_reset;
-	// choix de la police à utiliser
-	text_track.setFont(font); // font est un sf::Font
-	text_reset.setFont(font);
-
-	// choix de la chaîne de caractères à afficher
-	text_track.setString("Tracking Moteurs");
-	text_reset.setString("Reset Moteurs");
-
-	// choix de la taille des caractères
-	text_track.setCharacterSize(24); // exprimée en pixels, pas en points !
-	text_reset.setCharacterSize(24);
-
-	//text.setFillColor(sf::Color::Black);
-	text_track.setColor(sf::Color::Black);
-	text_reset.setColor(sf::Color::Black);
-
-	text_track.setPosition(sf::Vector2f(width+100, 35));
-	text_reset.setPosition(sf::Vector2f(width+100, 115));
-	
 	window.draw(text_track);
 	window.draw(text_reset);
 
-	/* Update the window */
         window.display();
 
 #endif
