@@ -97,14 +97,14 @@ void traitement(IplImage* frame, IplImage* HSV, IplImage* Binaire, int LowH, int
 	cvSmooth( HSV, HSV, CV_GAUSSIAN, 15, 0,0,0); //suppression des parasites par flou gaussien
 
 	//Binarisation
-
+/*
 	CvScalar valinf={(double)LowH,(double)LowS,(double)LowV};
 	CvScalar valsup={(double)HighH,(double)HighS,(double)HighV};
 
         cvInRangeS(HSV, valinf,valsup, Binaire);
-	
+*/	
 	//En cas d'erreur sur les trois ligne précédentes
-	//cvInRangeS(HSV, CvScalar(LowH,LowS,LowV),CvScalar(HighH,HighS,HighV), Binaire);
+	cvInRangeS(HSV, CvScalar(LowH,LowS,LowV),CvScalar(HighH,HighS,HighV), Binaire);
       
         //cvSmooth( Binaire, Binaire, CV_GAUSSIAN, 9, 9 ); //Legère suppression des parasites
 }

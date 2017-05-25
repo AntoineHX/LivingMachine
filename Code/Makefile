@@ -6,10 +6,10 @@ CFLAGS = -Wall -g3 -pg `pkg-config opencv --cflags`
 
 all: $(EXEC)
 
-KirbyTrack : KirbyTrack.o 
+KirbyTrack : KirbyTrack.o fonction.o
 	g++ -o $@ $< $(LDFLAGS) $(CFLAGS)
 
-KirbyTrack.o : KirbyTrack.c 
+KirbyTrack.o : KirbyTrack.c fonction.h
 	g++ -o $@ -c $<  $(CFLAGS)
 
 Navy : Navy.o fonction.o
