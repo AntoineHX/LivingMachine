@@ -22,7 +22,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include <SFML/System.hpp> //inutilisé pour le moment
+//#include <SFML/System.hpp> //inutilisé pour le moment
 
 /*DEFINE*/
 //ATTENTION AFFICHAGE OPENCV INCOMPATIBLE AVEC AFFICHAGE SFML
@@ -44,8 +44,8 @@
  * \def JEU
  * \brief Coefficient de tolérance pour le suivi d'objet
  */
-#define CONFIG
-//#define SFML
+//#define CONFIG
+#define SFML
 #define KIRBY
 //#define ETOILE
 

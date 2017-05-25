@@ -1,3 +1,12 @@
+/**
+ * \file      Navy.c
+ * \author    Jacques / Antoine
+ * \date       avril - mai 2017
+ * \brief      Figure Libre
+ *
+ * \details   Suivie d'un Kirby (Rose) ou d'une étoile (Jaune) par une caméra avec mode interface utilisateur ou configuration
+ */
+
 #include "fonction.h"
 
 

@@ -5,16 +5,14 @@
  * \brief      Figure Imposé : Suivi d'un objet coloré.
  *
  * \details   Suivie d'un Kirby (Rose) ou d'une étoile (Jaune) par une caméra avec mode interface utilisateur ou configuration
- * \bug (Résolu ?) SFML ne supporte qu'un nombre limité de sprite en fonction du PC
+ * \bug SFML ne supporte qu'un nombre limité de sprite en fonction du PC
  * \bug Affichage OpenCV incompatible avec SFML
  * \todo Optimisation du chargement de la frame en image SFML
- * \todo Verifier les angles du RESET
  */
 
 
 #include "fonction.h"
-#include "fonction.c" //Pour le problème de référence indéfinie à la compilation
-
+#include "fonction.c"
 
 /**
  * \fn int main(int argc, char* argv[])
@@ -88,26 +86,7 @@ int main(int argc, char* argv[])
 	int iLowV = 101;
 	int iHighV = 255;
 #endif
-#ifdef ETOILE
-	//Setup Etoile
-	int iLowH = 20;
-	int iHighH = 30;
 
-	int iLowS = 100; 
-	int iHighS = 255;
-
-	int iLowV = 100;
-	int iHighV = 255;
-#endif	
-
-#ifdef CONFIG
-	//Affichage du panneau de config
-	config(&iLowH, &iHighH, &iLowS, &iHighS, &iLowV, &iHighV);
-
-	boucle = 1;
-	tracking = 1; //Tracking de base en mode CONFIG
-#endif
-	 
     while(boucle)
     { 
 
@@ -165,30 +144,17 @@ int main(int argc, char* argv[])
 
 	sf::Vector2i PosMouse = sf::Mouse::getPosition(window);
 //Detection du bouton tracking
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)&&(PosMouse.x>640)&&(PosMouse.x<760)&&(PosMouse.y>0)&&(PosMouse.y<110)){
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)&&(PosMouse.x>640)&&(PosMouse.x<760)&&(PosMouse.y>0)&&(PosMouse.y<120)){
 		//printf("\n\n\n OK \n\n\n");
 		if (tracking){ tracking = 0;}
 		else tracking = 1;
 		cvWaitKey(100);
 	}
-
-//Detection du bouton reset
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)&&(PosMouse.x>640)&&(PosMouse.x<760)&&(PosMouse.y>110)&&(PosMouse.y<160)){
-		//printf("\n\n\n OK \n\n\n");
-		tracking = 0;
-		//Reset Position moteur
-		angle[0]=0; //ANGLES A VERIFIER
-		angle[1]=0;
-		controle_moteur(angle); 
-
-		cvWaitKey(100);
-	}
 	//printf("Pos Mouse : %d %d \n", PosMouse.x, PosMouse.y);
 
-//Dessin des boutons
+//Dessin du bouton de tracking
 	sf::Texture txBut;
 	sf::Sprite button_tracking;
-	sf::Sprite button_reset;
 	
 	if (!txBut.loadFromFile("Stock SFML/button.png")){
 		printf("Erreur chargement image SFML\n" );
@@ -198,16 +164,11 @@ int main(int argc, char* argv[])
 	button_tracking.setTexture(txBut);
 	button_tracking.setScale(0.5,0.5);
 	button_tracking.setPosition(sf::Vector2f(width+20, 20));
-	
-	button_reset.setTexture(txBut);
-	button_reset.setScale(0.5,0.5);
-	button_reset.setPosition(sf::Vector2f(width+20, 100));
 
 	if(tracking){ button_tracking.setColor(sf::Color::Green); }
 	else{ button_tracking.setColor(sf::Color::Red); }
 
 	window.draw(button_tracking);
-	window.draw(button_reset);
 
 //Ajout du texte
 	sf::Font font;
@@ -216,29 +177,22 @@ int main(int argc, char* argv[])
                 break;
 	}
 
-	sf::Text text_track;
-	sf::Text text_reset;
+	sf::Text text;
 	// choix de la police à utiliser
-	text_track.setFont(font); // font est un sf::Font
-	text_reset.setFont(font);
+	text.setFont(font); // font est un sf::Font
 
 	// choix de la chaîne de caractères à afficher
-	text_track.setString("Tracking Moteurs");
-	text_reset.setString("Reset Moteurs");
+	text.setString("Tracking Moteur");
 
 	// choix de la taille des caractères
-	text_track.setCharacterSize(24); // exprimée en pixels, pas en points !
-	text_reset.setCharacterSize(24);
+	text.setCharacterSize(24); // exprimée en pixels, pas en points !
 
 	//text.setFillColor(sf::Color::Black);
-	text_track.setColor(sf::Color::Black);
-	text_reset.setColor(sf::Color::Black);
+	text.setColor(sf::Color::Black);
 
-	text_track.setPosition(sf::Vector2f(width+100, 35));
-	text_reset.setPosition(sf::Vector2f(width+100, 115));
+	text.setPosition(sf::Vector2f(width+100, 35));
 	
-	window.draw(text_track);
-	window.draw(text_reset);
+	window.draw(text);
 
 	/* Update the window */
         window.display();

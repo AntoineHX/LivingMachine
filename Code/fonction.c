@@ -1,3 +1,11 @@
+/**
+ * \file      fonction.c
+ * \author    Jacques / Antoine
+ * \date       avril - mai 2017
+ * \brief      Fonctions utilisés dans les programmes
+ *
+ */
+
 #include "fonction.h"
 
 
