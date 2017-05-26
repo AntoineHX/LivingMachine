@@ -5,6 +5,8 @@
  * \brief      Figure Libre
  *
  * \details   Suivie d'un Kirby (Rose) ou d'une étoile (Jaune) par une caméra avec mode interface utilisateur ou configuration
+ * 
+ * \todo Reprendre nouvelle structure SFML de Kirbytrack 
  */
 
 #include "fonction.h"
@@ -43,7 +45,7 @@ int main(int argc, char* argv[])
 	sf::Texture txFlux;
 	sf::Sprite spFlux;
 	sf::Image imFlux;
-  sf::Event event;
+  	sf::Event event;
 
 	tracking = 0; //Pas de tracking de base en mode SFML
 	//Création de la fenetre principale
@@ -162,6 +164,15 @@ int main(int argc, char* argv[])
 	button_reset.setPosition(sf::Vector2f(width+20, 100));
 
 	window.draw(button_reset);
+/*
+	//musique
+	if(aye.getStatus()==sf::Sound::Stopped){
+			aye.setPitch(0.5);
+			aye.setVolume(150);
+			aye.setLoop(true);
+			aye.play();
+		}
+*/
 
 /*
 	//Ajout du texte

@@ -237,9 +237,9 @@ sf::Vector2i PosMouse = sf::Mouse::getPosition(window);
 		angle[0]=0; //ANGLES A VERIFIER
 		angle[1]=0;
 		controle_moteur(angle); 
-
+	
 		aye.play();
-
+		
 		cvWaitKey(100);
 	}
 	//printf("Pos Mouse : %d %d \n", PosMouse.x, PosMouse.y);
