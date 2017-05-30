@@ -8,6 +8,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -38,6 +45,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -63,12 +72,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('_navy_8c_source.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -77,507 +101,225 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="dir_23fdee2f6995db16c755697cdf620cf4.html">Code</a></li>  </ul>
-</div>
-</div><!-- top -->
 <div class="header">
   <div class="headertitle">
 <div class="title">Navy.c</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;cv.h&gt;</span> </div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;highgui.h&gt;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//#include &lt;opencv2/highgui.hpp&gt; //Pour le cvRound</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//#include &quot;opencv2/videoio/videoio_c.h&quot; //Pour le CvCapture*</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//#include &lt;cxcore.h&gt;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//#include &lt;SFML/Window.h&gt;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;SFML/Audio.hpp&gt;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;SFML/Graphics.hpp&gt;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;SFML/Window.hpp&gt;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;SFML/System.hpp&gt;</span> <span class="comment">//inutilisé pour le moment</span></div>
+<a href="_navy_8c.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="fonction_8h.html">fonction.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//#include &quot;fonction.c&quot; //Pour le problème de référence indéfinie à la compilation</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//#define CONFIG</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#define SFML</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#define KIRBY</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor"></span><span class="comment">//#define ETOILE</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#define JEU 0.15</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">//ATTENTION AFFICHAGE OPENCV INCOMPATIBLE AVEC AFFICHAGE SFML</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">//ATTENTION SFML SUPPORTE UN NOMBRE LIMITE DE SPRITE EN FCT DU PC</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">/*Headers*/</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_kirby_track_8c.html#a93cca84f54fe35dc9ad87eac3583889b">maj_angle</a>(<span class="keywordtype">int</span> vecX, <span class="keywordtype">int</span> vecY, <span class="keywordtype">int</span> rayon, <span class="keywordtype">double</span>* angle); <span class="comment">//Met à jour l&#39;angle selon la distance CentreCamera - Cible</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keywordtype">int</span> <a class="code" href="_kirby_track_8c.html#ae89e5fc7460ea890fa61d54fd209c1ae">ajust_pos</a>(<span class="keywordtype">int</span> pos, <span class="keywordtype">int</span> ref);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_kirby_track_8c.html#ad3f512a54511a63b30a8967077736766">controle_moteur</a>(<span class="keywordtype">double</span>* angle);<span class="comment">//Envoie les angles au moteur</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keywordtype">int</span> <a class="code" href="_kirby_track_8c.html#a9397b95e9279b0b9cd371c9a2b4514a2">limite_moteur</a>(<span class="keywordtype">int</span> val_pwm);<span class="comment">//Verifie que les valeurs envoyees aux moteurs sont correctes</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_kirby_track_8c.html#adcdd0544c8eb462cd2835ec99fa0f181">config</a>(<span class="keywordtype">int</span>* LowH, <span class="keywordtype">int</span>* HighH, <span class="keywordtype">int</span>* LowS, <span class="keywordtype">int</span>* HighS, <span class="keywordtype">int</span>* LowV, <span class="keywordtype">int</span>* HighV); <span class="comment">//Affiche le panneau de configuration de tracking avec les arguments comme valeur de base</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_kirby_track_8c.html#acc438fce8178d1d5aac4595f19529275">affichage_config</a>(IplImage* frame, IplImage* HSV, IplImage* Binaire); <span class="comment">//Affiche le flux vidéos et ses différent traitements</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_kirby_track_8c.html#a91b1b1daf28d90b5299a9a0486f5bdf1">Affichage_Tracking</a>(IplImage* frame, <span class="keywordtype">int</span> posX, <span class="keywordtype">int</span> posY, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height); <span class="comment">//Dessine les informations de tracking sur frame</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_kirby_track_8c.html#ac3e9405c4ebaa936308670c050285ae1">Position_moy</a>(IplImage* Binaire, <span class="keywordtype">int</span>* posX, <span class="keywordtype">int</span> * posY); <span class="comment">//Effectue le baricentre des pixels d&#39;une image binaire pour obtenir la postion de l&#39;objet</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_kirby_track_8c.html#a96b1dd5c66492425a00921b6eaaacc89">traitement</a>(IplImage* frame, IplImage* HSV, IplImage* Binaire, <span class="keywordtype">int</span> LowH, <span class="keywordtype">int</span> HighH, <span class="keywordtype">int</span> LowS, <span class="keywordtype">int</span> HighS, <span class="keywordtype">int</span> LowV, <span class="keywordtype">int</span> HighV); <span class="comment">//Effectue une binarisation de frame en fonction des bornes HSV</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keywordtype">int</span> image_CV2SFML(IplImage* imcv, sf::Image imFlux); <span class="comment">//Construction de imsf (RGBA) à partir de imcv (BGR), avec alpha constant (=1)</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keywordtype">int</span> <a class="code" href="_kirby_track_8c.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[])</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;{</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="comment">//Initialisations </span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordtype">int</span> height,width;  <span class="comment">//parameters of the image we are working on</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordtype">int</span> posX, posY; <span class="comment">//Position objet</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordtype">int</span> boucle;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keywordtype">int</span> <a class="code" href="_kirby_track_8c.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[])</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;{</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="comment">//Initialisations </span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keywordtype">int</span> height,width;  <span class="comment">//parameters of the image we are working on</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordtype">int</span> boucle = 1; <span class="comment">//On effectuera la boucle principale au moins une fois</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordtype">int</span> i;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordtype">float</span> scale_x, scale_y;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keywordtype">int</span> BGR[3];</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="comment">//Initialisation detection visage</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    CvHaarClassifierCascade* cascade = <a class="code" href="fonction_8c.html#a5e1058b3e8eb605a74ffdd7a26637b1e">init_cascade</a>();</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="structface.html">face</a>* tab_face[<a class="code" href="fonction_8h.html#a12190c71ff3acb9694bb2f782a1dfcdb">MAX_FACE</a>];</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordflow">for</span> (i=0;i&lt;2;i++){</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        tab_face[i] = (<a class="code" href="structface.html">face</a>*)malloc(<span class="keyword">sizeof</span>(<a class="code" href="structface.html">face</a>));</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    }</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordtype">int</span> rdy[<a class="code" href="fonction_8h.html#a12190c71ff3acb9694bb2f782a1dfcdb">MAX_FACE</a>];</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="comment">//Link</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    sf::Texture txLink;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    sf::Sprite Link;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordflow">if</span> (!txLink.loadFromFile(<span class="stringliteral">&quot;Stock SFML/link.png&quot;</span>)){</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        printf(<span class="stringliteral">&quot;Erreur chargement image SFML\n&quot;</span> );</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                <span class="keywordflow">return</span> EXIT_FAILURE;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    }</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    sf::Vector2u vec_link = txLink.getSize();</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordtype">double</span> angle[2] = {100,100};</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordtype">int</span> tracking;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#ifdef SFML</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor"></span>    <span class="comment">//Initialisation SFML</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    sf::Texture txFlux;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    sf::Sprite spFlux;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    sf::Image imFlux;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    sf::Event event;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="comment">//Ganon</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    sf::Texture txGanon;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    sf::Sprite Ganon;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordflow">if</span> (!txGanon.loadFromFile(<span class="stringliteral">&quot;Stock SFML/ganon.png&quot;</span>)){</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        printf(<span class="stringliteral">&quot;Erreur chargement image SFML\n&quot;</span> );</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                <span class="keywordflow">return</span> EXIT_FAILURE;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    }</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    sf::Vector2u vec_ganon = txGanon.getSize();</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="comment">//Initialisation SFML</span></div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    tracking = 0; <span class="comment">//Pas de tracking de base en mode SFML</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  <span class="comment">//Ouverture flux camera</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;  CvCapture* capture = cvCaptureFromCAM( 0 );</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  <span class="keywordflow">if</span>( !capture ){</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    printf(<span class="stringliteral">&quot;ERROR: capture is NULL \n&quot;</span> );</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    exit(EXIT_FAILURE);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  }</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    sf::Texture txFlux;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    sf::Sprite spFlux;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    sf::Image imFlux;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    sf::Event event;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="comment">//Chargement son</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    sf::Music aile;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">if</span> (!aile.openFromFile(<span class="stringliteral">&quot;Stock SFML/aile.ogg&quot;</span>))</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordflow">return</span> EXIT_FAILURE;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    aile.setLoop(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    aile.play();</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  <span class="comment">// grab an image from the capture</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  IplImage* frame = cvQueryFrame( capture );</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  <span class="comment">// get the image data</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  height    = frame-&gt;height;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  width     = frame-&gt;width;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;      </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;     <span class="comment">// capture size - </span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    CvSize size = cvSize(width,height);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;  </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">#ifdef SFML</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor"></span>    <span class="comment">//Création de la fenetre principale</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    sf::RenderWindow window(sf::VideoMode(width+300, height), <span class="stringliteral">&quot;KirbyTrack&quot;</span>);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="comment">// Initialize different images that are going to be used in the program</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    IplImage*  hsv_frame    = cvCreateImage(size, IPL_DEPTH_8U, 3); <span class="comment">// image converted to HSV plane</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    IplImage*  threshold   = cvCreateImage(size, IPL_DEPTH_8U, 1);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;  <span class="comment">//Controle couleur</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">#ifdef KIRBY</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor"></span>    <span class="comment">//Setup Kirby</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">int</span> iLowH = 152;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordtype">int</span> iHighH = 179;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    sf::Music hey;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordflow">if</span> (!hey.openFromFile(<span class="stringliteral">&quot;Stock SFML/hey_listen.ogg&quot;</span>))</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            <span class="keywordflow">return</span> EXIT_FAILURE;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    sf::Music watchout;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">if</span> (!watchout.openFromFile(<span class="stringliteral">&quot;Stock SFML/watchout.ogg&quot;</span>))</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            <span class="keywordflow">return</span> EXIT_FAILURE;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  <span class="comment">//Ouverture flux camera</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  CvCapture* capture = cvCaptureFromCAM( 0 );</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;  <span class="keywordflow">if</span>( !capture ){</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    printf(<span class="stringliteral">&quot;ERROR: capture is NULL \n&quot;</span> );</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    exit(EXIT_FAILURE);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;  }</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  <span class="comment">// grab an image from the capture</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  IplImage* frame = cvQueryFrame( capture );</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  <span class="comment">// get the image data</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  height    = frame-&gt;height;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;  width     = frame-&gt;width;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;     <span class="comment">// capture size - </span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;   <span class="comment">// CvSize size = cvSize(width,height);</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">int</span> iLowS = 48; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">int</span> iHighS = 255;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keywordtype">int</span> iLowV = 101;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordtype">int</span> iHighV = 255;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#ifdef ETOILE</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="preprocessor"></span>    <span class="comment">//Setup Etoile</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordtype">int</span> iLowH = 20;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordtype">int</span> iHighH = 30;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordtype">int</span> iLowS = 100; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keywordtype">int</span> iHighS = 255;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordtype">int</span> iLowV = 100;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">int</span> iHighV = 255;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor">#endif  </span></div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="preprocessor">#ifdef CONFIG</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor"></span>    <span class="comment">//Affichage du panneau de config</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <a class="code" href="_kirby_track_8c.html#adcdd0544c8eb462cd2835ec99fa0f181">config</a>(&amp;iLowH, &amp;iHighH, &amp;iLowS, &amp;iHighS, &amp;iLowV, &amp;iHighV);</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    boucle = 1;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    tracking = 1; <span class="comment">//Tracking de base en mode CONFIG</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="preprocessor"></span>     </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keywordflow">while</span>(boucle)</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    { </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="comment">//Création de la fenetre principale</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    sf::RenderWindow window(sf::VideoMode(width, height), <span class="stringliteral">&quot;KirbyTrack&quot;</span>);</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordflow">while</span>(boucle)</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    { </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        boucle = window.isOpen();</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="comment">// on inspecte tous les évènements de la fenêtre qui ont été émis depuis la précédente itération</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordflow">while</span> (window.pollEvent(event))</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        {</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            <span class="comment">// évènement &quot;fermeture demandée&quot; : on ferme la fenêtre</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            <span class="keywordflow">if</span> (event.type == sf::Event::Closed)</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                      window.close();</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        }</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="comment">// Get one frame</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        frame = cvQueryFrame( capture );</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;              </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keywordflow">if</span>( !frame ){</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            perror(<span class="stringliteral">&quot;ERROR: frame is null...&quot;</span>);</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        }</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <a class="code" href="fonction_8c.html#ab9c63795209f514f5d3554bc9450b8de">detect_and_draw</a>(frame,cascade,tab_face);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="preprocessor">#ifdef SFML</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor"></span>        boucle = window.isOpen();</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="comment">// on inspecte tous les évènements de la fenêtre qui ont été émis depuis la précédente itération</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <span class="keywordflow">while</span> (window.pollEvent(event))</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        {</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;            <span class="comment">// évènement &quot;fermeture demandée&quot; : on ferme la fenêtre</span></div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;            <span class="keywordflow">if</span> (event.type == sf::Event::Closed)</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;                      window.close();</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        }</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        <span class="comment">// Get one frame</span></div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        frame = cvQueryFrame( capture );</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;              </div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <span class="keywordflow">if</span>( !frame ){</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            perror(<span class="stringliteral">&quot;ERROR: frame is null...&quot;</span>);</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        }</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="comment">//Affichage SFML</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="comment">/* Clear the screen */</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        window.clear(sf::Color::White); </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="comment">//Affichage de la frame</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="comment">//Le chargement pourrait etre plus optimisé en créant nous me l&#39;image SFML en parcourant l&#39;IplImage</span></div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    <span class="comment">//Enregistrement de la frame openCV</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    cvSaveImage(<span class="stringliteral">&quot;Stock SFML/temp.jpg&quot;</span>, frame);</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="comment">//Chargement de la frame en texture SFML</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keywordflow">if</span> (!txFlux.loadFromFile(<span class="stringliteral">&quot;Stock SFML/temp.jpg&quot;</span>)){</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        printf(<span class="stringliteral">&quot;Erreur chargement image SFML\n&quot;</span> );</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    }</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    spFlux.setTexture(txFlux);</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    window.draw(spFlux);</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <span class="comment">//Binarisation du flux vidéo</span></div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <a class="code" href="_kirby_track_8c.html#a96b1dd5c66492425a00921b6eaaacc89">traitement</a>(frame, hsv_frame, threshold, iLowH, iHighH, iLowS, iHighS, iLowV, iHighV);</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;              </div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <span class="comment">// Calculate the moments to estimate the position of the ball </span></div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <a class="code" href="_kirby_track_8c.html#ac3e9405c4ebaa936308670c050285ae1">Position_moy</a>(threshold, &amp;posX, &amp;posY);</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;              </div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="comment">//Dessine les informations de tracking sur frame</span></div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <a class="code" href="_kirby_track_8c.html#a91b1b1daf28d90b5299a9a0486f5bdf1">Affichage_Tracking</a>(frame, posX, posY, width, height);</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="preprocessor">#ifdef SFML</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="preprocessor"></span>    <span class="comment">//Affichage SFML</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <span class="comment">/* Clear the screen */</span></div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        window.clear(sf::Color::White); </div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    Link.setTexture(txLink);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    Link.setOrigin(sf::Vector2f(vec_link.x/2,vec_link.y/2));</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    Link.setPosition(sf::Vector2f(tab_face[0]-&gt;point.x, tab_face[0]-&gt;point.y));</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    scale_x = tab_face[0]-&gt;largeur / (1.0*vec_link.x);</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    scale_y = tab_face[0]-&gt;largeur / (1.0*vec_link.y);</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="comment">//printf(&quot;%d , %d et%lf, %lf\n&quot;,tab_face[0]-&gt;largeur,vec_link.x,scale_x,scale_y);</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    Link.setScale(sf::Vector2f(scale_x, scale_y));</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    </div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    Ganon.setTexture(txGanon);</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    Ganon.setOrigin(sf::Vector2f(vec_ganon.x/2,vec_ganon.y/2));</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    Ganon.setPosition(sf::Vector2f(tab_face[1]-&gt;point.x, tab_face[1]-&gt;point.y));</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    scale_x = tab_face[1]-&gt;largeur / (1.0*vec_ganon.x);</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    scale_y = tab_face[1]-&gt;largeur / (1.0*vec_ganon.y);</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    Ganon.setScale(sf::Vector2f(scale_x, scale_y));</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <span class="comment">//Conversion de la frame en image smfl</span></div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    <span class="comment">/*if(image_CV2SFML(frame, imFlux)){</span></div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="comment">        printf(&quot;Erreur conversion OpenCV-SFML\n&quot;);</span></div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="comment">        break;</span></div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="comment">    }</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="comment">        */</span></div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="comment">//Enregistrement de la frame openCV</span></div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    cvSaveImage(<span class="stringliteral">&quot;Stock SFML/temp.jpg&quot;</span>, frame);</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <span class="comment">//Chargement de la frame en texture SFML</span></div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    <span class="keywordflow">if</span> (!txFlux.loadFromFile(<span class="stringliteral">&quot;Stock SFML/temp.jpg&quot;</span>)){</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        printf(<span class="stringliteral">&quot;Erreur chargement image SFML\n&quot;</span> );</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    }</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    spFlux.setTexture(txFlux);</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    window.draw(spFlux);</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="comment">//TEST SFML</span></div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    sf::Vector2i PosMouse = sf::Mouse::getPosition(window);</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    <span class="comment">//Detection du bouton tracking</span></div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    <span class="keywordflow">if</span> (sf::Mouse::isButtonPressed(sf::Mouse::Left)&amp;&amp;(PosMouse.x&gt;640)&amp;&amp;(PosMouse.x&lt;760)&amp;&amp;(PosMouse.y&gt;0)&amp;&amp;(PosMouse.y&lt;120)){</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        <span class="comment">//printf(&quot;\n\n\n OK \n\n\n&quot;);</span></div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <span class="keywordflow">if</span> (tracking){ tracking = 0;}</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <span class="keywordflow">else</span> tracking = 1;</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        cvWaitKey(100);</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    }</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    <span class="comment">//printf(&quot;Pos Mouse : %d %d \n&quot;, PosMouse.x, PosMouse.y);</span></div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    <span class="comment">//Dessin du bouton de tracking</span></div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    sf::Texture txBut;</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    sf::Sprite button_tracking;</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    </div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="keywordflow">if</span> (!txBut.loadFromFile(<span class="stringliteral">&quot;Stock SFML/button.png&quot;</span>)){</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        printf(<span class="stringliteral">&quot;Erreur chargement image SFML\n&quot;</span> );</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    }</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    </div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    button_tracking.setTexture(txBut);</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    button_tracking.setScale(0.5,0.5);</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    button_tracking.setPosition(sf::Vector2f(width+20, 20));</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="keywordflow">if</span>(tracking){ button_tracking.setColor(sf::Color::Green); }</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    <span class="keywordflow">else</span>{ button_tracking.setColor(sf::Color::Red); }</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    window.draw(button_tracking);</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    <span class="comment">//Dessin du bouton reset</span></div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    sf::Texture txBut2;</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    sf::Sprite button_reset;</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    <span class="keywordflow">if</span> (!txBut2.loadFromFile(<span class="stringliteral">&quot;Stock SFML/button.png&quot;</span>)){</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        printf(<span class="stringliteral">&quot;Erreur chargement image SFML\n&quot;</span> );</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    }</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    </div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    button_reset.setTexture(txBut2);</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    button_reset.setScale(0.5,0.5);</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    button_reset.setPosition(sf::Vector2f(width+20, 100));</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    window.draw(button_reset);</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="comment">    //Ajout du texte</span></div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="comment">    sf::Font font;</span></div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="comment">    if (!font.loadFromFile(&quot;Stock SFML/arial.ttf&quot;)){</span></div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="comment">            printf(&quot;Erreur chargement police SFML\n&quot; );</span></div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="comment">                break;</span></div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="comment">    }</span></div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="comment">    sf::Text text;</span></div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;<span class="comment">    // choix de la police à utiliser</span></div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="comment">    text.setFont(font); // font est un sf::Font</span></div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="comment">    // choix de la chaîne de caractères à afficher</span></div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;<span class="comment">    text.setString(&quot;Tracking Moteur&quot;);</span></div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;<span class="comment">    // choix de la taille des caractères</span></div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="comment">    text.setCharacterSize(24); // exprimée en pixels, pas en points !</span></div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="comment">    //text.setFillColor(sf::Color::Black);</span></div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="comment">    text.setColor(sf::Color::Black);</span></div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="comment">    text.setPosition(sf::Vector2f(width+100, 35));</span></div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="comment">    </span></div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="comment">    window.draw(text);</span></div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="comment">*/</span></div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="comment">    //Link</span></div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="comment">    sf::Texture txLink;</span></div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="comment">    sf::Sprite Link;</span></div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="comment">    </span></div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="comment">    if (!txLink.loadFromFile(&quot;Stock SFML/link.png&quot;)){</span></div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="comment">        printf(&quot;Erreur chargement image SFML\n&quot; );</span></div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="comment">                break;</span></div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="comment">    }</span></div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="comment">    </span></div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="comment">    Link.setTexture(txLink);</span></div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="comment">    Link.setPosition(sf::Vector2f(posX-75, posY-75));</span></div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="comment">    window.draw(Link);</span></div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="comment">*/</span></div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    <span class="comment">/* Update the window */</span></div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        window.display();</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    <span class="keywordflow">if</span>(tracking){</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        <span class="comment">//Mouvements moteurs</span></div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="comment">//printf(&quot;-PREMAJ_ANGLE...: %d %d\n&quot;,width,height);</span></div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <a class="code" href="_kirby_track_8c.html#a93cca84f54fe35dc9ad87eac3583889b">maj_angle</a>(<a class="code" href="_kirby_track_8c.html#ae89e5fc7460ea890fa61d54fd209c1ae">ajust_pos</a>(posX-width/2,width), <a class="code" href="_kirby_track_8c.html#ae89e5fc7460ea890fa61d54fd209c1ae">ajust_pos</a>(posY-height/2,height), height*<a class="code" href="_kirby_track_8c.html#afb63dbc6e533233f41d03e8b8a3bc570">JEU</a>, angle);</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        <a class="code" href="_kirby_track_8c.html#ad3f512a54511a63b30a8967077736766">controle_moteur</a>(angle); </div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        cvWaitKey(50);</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    }</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="preprocessor">#ifdef CONFIG</span></div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="preprocessor"></span>        <a class="code" href="_kirby_track_8c.html#acc438fce8178d1d5aac4595f19529275">affichage_config</a>(frame, hsv_frame, threshold); <span class="comment">//Affichage du flux vidéo et de ses traitements</span></div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    </div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <span class="keywordflow">if</span>( (cvWaitKey(10) ) &gt;= 0 ) <span class="keywordflow">break</span>; <span class="comment">//Arret capture</span></div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    }</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    </div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    <span class="comment">//cvWaitKey(0); //Fin programme</span></div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    </div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    <span class="comment">// Release the capture device housekeeping</span></div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    cvReleaseCapture( &amp;capture );</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;     </div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    cvReleaseImage(&amp;threshold);</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    cvReleaseImage(&amp;hsv_frame);</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    cvReleaseImage(&amp;frame);</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;     </div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    <span class="keywordflow">return</span> EXIT_SUCCESS;</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;}</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_kirby_track_8c.html#a93cca84f54fe35dc9ad87eac3583889b">maj_angle</a>(<span class="keywordtype">int</span> vecX, <span class="keywordtype">int</span> vecY, <span class="keywordtype">int</span> rayon, <span class="keywordtype">double</span>* angle){</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    <span class="comment">//On ajustera coeff fonction du rayon. Si la cible est à une distance 5*r, il sera 5x plus rapide que s&#39;il était à 1*r</span></div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    <span class="keywordtype">double</span> coeffx, coeffy;</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    <span class="keywordtype">int</span> l0, l1;</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    <span class="comment">//printf(&quot;-MAJ_ANGLE...Valeur maj_angle arguments : %d %d %d\n\tAnciens angles : %d %d\n\t&quot;,vecX,vecY,rayon,(int)angle[0],(int)angle[1]);</span></div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    <span class="comment">//Ajout d&#39;un angle moteur pondéré par la distance</span></div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    coeffx = -0.2*vecX/rayon;</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    coeffy = 0.2*vecY/rayon;</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    angle[0] += coeffx;</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    angle[1] += coeffy;</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    <span class="comment">//Majoration - minoration des angles moteurs</span></div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    l0 = <a class="code" href="_kirby_track_8c.html#a9397b95e9279b0b9cd371c9a2b4514a2">limite_moteur</a>(angle[0]);</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    l1 = <a class="code" href="_kirby_track_8c.html#a9397b95e9279b0b9cd371c9a2b4514a2">limite_moteur</a>(angle[1]);</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    <span class="keywordflow">if</span> (l0 != 0) angle[0] = l0;</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    <span class="keywordflow">if</span> (l1 != 0) angle[1] = l1;</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    <span class="comment">//printf(&quot;Nouveaux angles : %lf %lf %d %d\n&quot;,angle[0],angle[1],(int)angle[0],(int)angle[0]);</span></div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;}</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="keywordtype">int</span> <a class="code" href="_kirby_track_8c.html#ae89e5fc7460ea890fa61d54fd209c1ae">ajust_pos</a>(<span class="keywordtype">int</span> pos, <span class="keywordtype">int</span> ref){</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <span class="keywordflow">if</span> (pos &gt; ref) <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">return</span> pos;</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;}</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;<span class="keywordtype">int</span> <a class="code" href="_kirby_track_8c.html#a9397b95e9279b0b9cd371c9a2b4514a2">limite_moteur</a>(<span class="keywordtype">int</span> val_pwm){</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    <span class="keywordtype">int</span> MAX_PWM = 130, MIN_PWM = 30;</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <span class="keywordflow">if</span> (val_pwm &gt; MAX_PWM){ </div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        <span class="keywordflow">return</span> MAX_PWM;</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    }</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (val_pwm &lt; MIN_PWM){</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        <span class="keywordflow">return</span> MIN_PWM;</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    }</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    <span class="keywordflow">else</span>{</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    }</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;}</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_kirby_track_8c.html#ad3f512a54511a63b30a8967077736766">controle_moteur</a>(<span class="keywordtype">double</span>* angle){</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    <span class="comment">//Ouverture port serie</span></div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    FILE* fichier = NULL;</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    fichier = fopen(<span class="stringliteral">&quot;/dev/ttyACM0&quot;</span>,<span class="stringliteral">&quot;w&quot;</span>);</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <span class="keywordflow">if</span>(fichier==NULL){</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        printf(<span class="stringliteral">&quot;Erreur ouverture fichier\n&quot;</span>);</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        perror(<span class="stringliteral">&quot;fopen failed for /dev/ttyACM0&quot;</span> );</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        exit( EXIT_FAILURE );</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    }</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    <span class="comment">//Ecriture angles</span></div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    fprintf(fichier,<span class="stringliteral">&quot;%d\n&quot;</span>,(<span class="keywordtype">int</span>)angle[0]);</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    fprintf(fichier,<span class="stringliteral">&quot;%d\n&quot;</span>,(<span class="keywordtype">int</span>)angle[1]);</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    <span class="comment">//Fermeture</span></div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;    fclose(fichier);</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;}</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;<span class="keywordtype">int</span> image_CV2SFML(IplImage* imcv, sf::Image imFlux){</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    </div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    <span class="keywordtype">int</span> R, G, B;</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    <span class="keywordtype">int</span> w = imcv-&gt;widthStep;</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    <span class="keywordtype">char</span>* ptr = imcv-&gt;imageData;</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;    imFlux.create(imcv-&gt;width,imcv-&gt;height, NULL); <span class="comment">//Initialise une image vide</span></div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    <span class="keywordflow">for</span>( <span class="keywordtype">int</span> y=0; y&lt;imcv-&gt;height; y++ ) { </div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;            <span class="comment">//uchar* ptr = (uchar*) ( imcv-&gt;imageData + y * imcv-&gt;widthStep );</span></div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;            <span class="keywordflow">for</span>( <span class="keywordtype">int</span> x=0; x&lt;imcv-&gt;width; x++ ) { </div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;                    <span class="comment">//Recupération du pixel</span></div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;            B = ptr[y*w + 3*x];</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;            G = ptr[y*w + 3*x + 1]; </div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;            R = ptr[y*w + 3*x + 2];</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;            <span class="comment">//Ecriture du pixel associé</span></div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;            imFlux.setPixel(x,y,sf::Color(R,G,B,1)); <span class="comment">//Alpha channel = 1</span></div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;            }</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        }</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;}</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_kirby_track_8c.html#a96b1dd5c66492425a00921b6eaaacc89">traitement</a>(IplImage* frame, IplImage* HSV, IplImage* Binaire, <span class="keywordtype">int</span> LowH, <span class="keywordtype">int</span> HighH, <span class="keywordtype">int</span> LowS, <span class="keywordtype">int</span> HighS, <span class="keywordtype">int</span> LowV, <span class="keywordtype">int</span> HighV){ <span class="comment">//Effectue une binarisation de frame en fonction des bornes HSV</span></div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    <span class="comment">// Covert color space to HSV as it is much easier to filter colors in the HSV color-space.</span></div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;        cvCvtColor(frame, HSV, CV_BGR2HSV);</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    </div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    <span class="comment">//Blur</span></div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    cvSmooth( HSV, HSV, CV_GAUSSIAN, 15, 0,0,0); <span class="comment">//suppression des parasites par flou gaussien</span></div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    <span class="comment">//Binarisation</span></div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    CvScalar valinf={(double)LowH,(<span class="keywordtype">double</span>)LowS,(double)LowV};</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    CvScalar valsup={(double)HighH,(<span class="keywordtype">double</span>)HighS,(double)HighV};</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;        cvInRangeS(HSV, valinf,valsup, Binaire);</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    </div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    <span class="comment">//En cas d&#39;erreur sur les trois ligne précédentes</span></div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;    <span class="comment">//cvInRangeS(HSV, CvScalar(LowH,LowS,LowV),CvScalar(HighH,HighS,HighV), Binaire);</span></div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;      </div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;        <span class="comment">//cvSmooth( Binaire, Binaire, CV_GAUSSIAN, 9, 9 ); //Legère suppression des parasites</span></div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;}</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;</div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_kirby_track_8c.html#ac3e9405c4ebaa936308670c050285ae1">Position_moy</a>(IplImage* Binaire, <span class="keywordtype">int</span>* posX, <span class="keywordtype">int</span> * posY){ <span class="comment">//Effectue le baricentre des pixels d&#39;une image binaire pour obtenir la postion de l&#39;objet</span></div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;    CvMoments *moments = (CvMoments*)malloc(<span class="keyword">sizeof</span>(CvMoments)); </div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    cvMoments(Binaire, moments, 1); </div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;        <span class="comment">// The actual moment values </span></div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        <span class="keywordtype">double</span> moment10 = cvGetSpatialMoment(moments, 1, 0); </div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        <span class="keywordtype">double</span> moment01 = cvGetSpatialMoment(moments, 0, 1); </div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        <span class="keywordtype">double</span> area = cvGetCentralMoment(moments, 0, 0);</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;        </div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;        *posX = moment10/area;</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;        *posY = moment01/area;</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    free(moments);</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;}</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_kirby_track_8c.html#adcdd0544c8eb462cd2835ec99fa0f181">config</a>(<span class="keywordtype">int</span>* LowH, <span class="keywordtype">int</span>* HighH, <span class="keywordtype">int</span>* LowS, <span class="keywordtype">int</span>* HighS, <span class="keywordtype">int</span>* LowV, <span class="keywordtype">int</span>* HighV){ <span class="comment">//Affiche le panneau de configuration de tracking avec les arguments comme valeur de base</span></div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    cvNamedWindow(<span class="stringliteral">&quot;Control&quot;</span>, CV_WINDOW_AUTOSIZE); <span class="comment">//create a window called &quot;Control&quot;</span></div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;     <span class="comment">//Create trackbars in &quot;Control&quot; window</span></div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;     cvCreateTrackbar(<span class="stringliteral">&quot;LowH&quot;</span>, <span class="stringliteral">&quot;Control&quot;</span>, LowH, 179,NULL); <span class="comment">//Hue (0 - 179)</span></div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;     cvCreateTrackbar(<span class="stringliteral">&quot;HighH&quot;</span>, <span class="stringliteral">&quot;Control&quot;</span>, HighH, 179,NULL);</div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;     cvCreateTrackbar(<span class="stringliteral">&quot;LowS&quot;</span>, <span class="stringliteral">&quot;Control&quot;</span>, LowS, 255,NULL); <span class="comment">//Saturation (0 - 255)</span></div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;     cvCreateTrackbar(<span class="stringliteral">&quot;HighS&quot;</span>, <span class="stringliteral">&quot;Control&quot;</span>, HighS, 255,NULL);</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;     cvCreateTrackbar(<span class="stringliteral">&quot;LowV&quot;</span>, <span class="stringliteral">&quot;Control&quot;</span>, LowV, 255,NULL); <span class="comment">//Value (0 - 255)</span></div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;     cvCreateTrackbar(<span class="stringliteral">&quot;HighV&quot;</span>, <span class="stringliteral">&quot;Control&quot;</span>, HighV, 255,NULL);</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;}</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_kirby_track_8c.html#acc438fce8178d1d5aac4595f19529275">affichage_config</a>(IplImage* frame, IplImage* HSV, IplImage* Binaire){ <span class="comment">//Affiche le flux vidéos et ses différent traitements</span></div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;    </div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;    <span class="comment">// Create a window in which the captured images will be presented</span></div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;    cvNamedWindow( <span class="stringliteral">&quot;HSV&quot;</span>, CV_WINDOW_AUTOSIZE );</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;    cvNamedWindow( <span class="stringliteral">&quot;Binaire&quot;</span>, CV_WINDOW_AUTOSIZE );</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;    cvNamedWindow( <span class="stringliteral">&quot;Camera&quot;</span>, CV_WINDOW_AUTOSIZE );</div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;</div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;        cvShowImage( <span class="stringliteral">&quot;HSV&quot;</span>, HSV); <span class="comment">// Original stream in the HSV color space</span></div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;        cvShowImage( <span class="stringliteral">&quot;Binaire&quot;</span>, Binaire); <span class="comment">// The stream after color filtering</span></div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;    cvShowImage( <span class="stringliteral">&quot;Camera&quot;</span>, frame ); <span class="comment">// Flux caméra avec tracking objet</span></div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;}</div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_kirby_track_8c.html#a91b1b1daf28d90b5299a9a0486f5bdf1">Affichage_Tracking</a>(IplImage* frame, <span class="keywordtype">int</span> posX, <span class="keywordtype">int</span> posY, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height){ <span class="comment">//Dessine les informations de tracking sur frame</span></div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;</div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;    <span class="comment">//Affichage zone suivie objet</span></div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;        cvCircle(frame, cvPoint(width/2,height/2), height*<a class="code" href="_kirby_track_8c.html#afb63dbc6e533233f41d03e8b8a3bc570">JEU</a>, CV_RGB(0, 255, 0), 4, 8, 0 );</div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;</div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;    <span class="keywordflow">if</span>(posX&lt;5&amp;&amp;posY&lt;5){ <span class="comment">//Si aucun objet spotted, pointeur rouge au centre</span></div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;        posX=width/2;</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;        posY=height/2;</div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;        cvLine(frame, cvPoint(posX-20,posY), cvPoint(posX+20,posY), CV_RGB(255, 0, 0), 4, 8, 0 );</div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;    cvLine(frame, cvPoint(posX,posY-20), cvPoint(posX,posY+20), CV_RGB(255, 0, 0), 4, 8, 0 );</div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;    }</div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;    <span class="keywordflow">else</span>{ <span class="comment">//Objet spotted</span></div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;    <span class="comment">//Affichage position de l&#39;objet</span></div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;    cvLine(frame, cvPoint(posX-20,posY), cvPoint(posX+20,posY), CV_RGB(0, 0, 255), 4, 8, 0 );</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;    cvLine(frame, cvPoint(posX,posY-20), cvPoint(posX,posY+20), CV_RGB(0, 0, 255), 4, 8, 0 );</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        }</div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;}</div>
-<div class="ttc" id="_kirby_track_8c_html_ac3e9405c4ebaa936308670c050285ae1"><div class="ttname"><a href="_kirby_track_8c.html#ac3e9405c4ebaa936308670c050285ae1">Position_moy</a></div><div class="ttdeci">void Position_moy(IplImage *Binaire, int *posX, int *posY)</div><div class="ttdoc">Effectue le baricentre des pixels d&#39;une image binaire pour obtenir la postion de l&#39;objet. </div><div class="ttdef"><b>Definition:</b> <a href="_kirby_track_8c_source.html#l00474">KirbyTrack.c:474</a></div></div>
-<div class="ttc" id="_kirby_track_8c_html_adcdd0544c8eb462cd2835ec99fa0f181"><div class="ttname"><a href="_kirby_track_8c.html#adcdd0544c8eb462cd2835ec99fa0f181">config</a></div><div class="ttdeci">void config(int *LowH, int *HighH, int *LowS, int *HighS, int *LowV, int *HighV)</div><div class="ttdoc">Fonction d&#39;affichage du panneau de configuration de la couleur à suivre. </div><div class="ttdef"><b>Definition:</b> <a href="_kirby_track_8c_source.html#l00490">KirbyTrack.c:490</a></div></div>
-<div class="ttc" id="_kirby_track_8c_html_afb63dbc6e533233f41d03e8b8a3bc570"><div class="ttname"><a href="_kirby_track_8c.html#afb63dbc6e533233f41d03e8b8a3bc570">JEU</a></div><div class="ttdeci">#define JEU</div><div class="ttdoc">Coefficient de tolérance pour le suivi d&#39;objet. </div><div class="ttdef"><b>Definition:</b> <a href="_kirby_track_8c_source.html#l00042">KirbyTrack.c:42</a></div></div>
-<div class="ttc" id="_kirby_track_8c_html_ae89e5fc7460ea890fa61d54fd209c1ae"><div class="ttname"><a href="_kirby_track_8c.html#ae89e5fc7460ea890fa61d54fd209c1ae">ajust_pos</a></div><div class="ttdeci">int ajust_pos(int pos, int ref)</div><div class="ttdoc">permet d&#39;éviter des positions supérieures à ref considérées comme aberrantes. </div><div class="ttdef"><b>Definition:</b> <a href="_kirby_track_8c_source.html#l00415">KirbyTrack.c:415</a></div></div>
-<div class="ttc" id="_kirby_track_8c_html_a93cca84f54fe35dc9ad87eac3583889b"><div class="ttname"><a href="_kirby_track_8c.html#a93cca84f54fe35dc9ad87eac3583889b">maj_angle</a></div><div class="ttdeci">void maj_angle(int vecX, int vecY, int rayon, double *angle)</div><div class="ttdoc">Met à jour angle selon la distance entre le centre de la caméra et la cible, avec un tolérance circul...</div><div class="ttdef"><b>Definition:</b> <a href="_kirby_track_8c_source.html#l00391">KirbyTrack.c:391</a></div></div>
-<div class="ttc" id="_kirby_track_8c_html_a9397b95e9279b0b9cd371c9a2b4514a2"><div class="ttname"><a href="_kirby_track_8c.html#a9397b95e9279b0b9cd371c9a2b4514a2">limite_moteur</a></div><div class="ttdeci">int limite_moteur(int val_pwm)</div><div class="ttdoc">Fonction qui vérifie que les valeurs envoyees aux moteurs sont correctes. </div><div class="ttdef"><b>Definition:</b> <a href="_kirby_track_8c_source.html#l00420">KirbyTrack.c:420</a></div></div>
-<div class="ttc" id="_kirby_track_8c_html_a91b1b1daf28d90b5299a9a0486f5bdf1"><div class="ttname"><a href="_kirby_track_8c.html#a91b1b1daf28d90b5299a9a0486f5bdf1">Affichage_Tracking</a></div><div class="ttdeci">void Affichage_Tracking(IplImage *frame, int posX, int posY, int width, int height)</div><div class="ttdoc">Fonction d&#39;affichage des informations de suivi. </div><div class="ttdef"><b>Definition:</b> <a href="_kirby_track_8c_source.html#l00517">KirbyTrack.c:517</a></div></div>
-<div class="ttc" id="_kirby_track_8c_html_a0ddf1224851353fc92bfbff6f499fa97"><div class="ttname"><a href="_kirby_track_8c.html#a0ddf1224851353fc92bfbff6f499fa97">main</a></div><div class="ttdeci">int main(int argc, char *argv[])</div><div class="ttdoc">Entrée du programme. </div><div class="ttdef"><b>Definition:</b> <a href="_kirby_track_8c_source.html#l00162">KirbyTrack.c:162</a></div></div>
-<div class="ttc" id="_kirby_track_8c_html_ad3f512a54511a63b30a8967077736766"><div class="ttname"><a href="_kirby_track_8c.html#ad3f512a54511a63b30a8967077736766">controle_moteur</a></div><div class="ttdeci">void controle_moteur(double *angle)</div><div class="ttdoc">Fonction d&#39;envoie des angles aux moteurs. </div><div class="ttdef"><b>Definition:</b> <a href="_kirby_track_8c_source.html#l00433">KirbyTrack.c:433</a></div></div>
-<div class="ttc" id="_kirby_track_8c_html_acc438fce8178d1d5aac4595f19529275"><div class="ttname"><a href="_kirby_track_8c.html#acc438fce8178d1d5aac4595f19529275">affichage_config</a></div><div class="ttdeci">void affichage_config(IplImage *frame, IplImage *HSV, IplImage *Binaire)</div><div class="ttdoc">Fonction d&#39;affichage du flux vidéo, du flux en HSV et de sa binarisation. </div><div class="ttdef"><b>Definition:</b> <a href="_kirby_track_8c_source.html#l00505">KirbyTrack.c:505</a></div></div>
-<div class="ttc" id="_kirby_track_8c_html_a96b1dd5c66492425a00921b6eaaacc89"><div class="ttname"><a href="_kirby_track_8c.html#a96b1dd5c66492425a00921b6eaaacc89">traitement</a></div><div class="ttdeci">void traitement(IplImage *frame, IplImage *HSV, IplImage *Binaire, int LowH, int HighH, int LowS, int HighS, int LowV, int HighV)</div><div class="ttdoc">Effectue une binarisation de frame en fonction des bornes HSV. </div><div class="ttdef"><b>Definition:</b> <a href="_kirby_track_8c_source.html#l00453">KirbyTrack.c:453</a></div></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    window.draw(Link);</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    window.draw(Ganon);</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="comment">/* Update the window */</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        window.display();</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    </div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="comment">//Marqueurs rdy</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="keywordflow">for</span> (i=0 ; i&lt;<a class="code" href="fonction_8h.html#a12190c71ff3acb9694bb2f782a1dfcdb">MAX_FACE</a> ; i++){</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="keywordflow">if</span>(tab_face[i]-&gt;largeur==0){</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            rdy[i]=1;</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        }</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    }</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    <span class="keywordflow">if</span>((tab_face[1]-&gt;largeur&gt;0) &amp;&amp; (watchout.getStatus()==sf::Sound::Stopped) &amp;&amp; rdy[1]){</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;            watchout.play();</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            rdy[1]=0;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    }</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <span class="keywordflow">if</span>((tab_face[0]-&gt;largeur&gt;0) &amp;&amp; (hey.getStatus()==sf::Sound::Stopped) &amp;&amp; rdy[0]){</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        hey.play();</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        rdy[0]=0;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        printf(<span class="stringliteral">&quot;a\n&quot;</span>);</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        get_color(frame, tab_face[0],BGR);</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        printf(<span class="stringliteral">&quot;B = %d, G = %d, R = %d\n&quot;</span>,BGR[0],BGR[1],BGR[2]);</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    }</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;}</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    <span class="comment">// Release the capture device housekeeping</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    cvReleaseCapture( &amp;capture );</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;     </div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    cvReleaseImage(&amp;frame);</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;     </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="keywordflow">return</span> EXIT_SUCCESS;</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;}</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="comment">    //musique</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="comment">    if(aye.getStatus()==sf::Sound::Stopped){</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="comment">            aye.setPitch(0.5);</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="comment">            aye.setVolume(150);</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;<span class="comment">            aye.setLoop(true);</span></div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;<span class="comment">            aye.play();</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="comment">        }</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;</div>
+<div class="ttc" id="fonction_8c_html_ab9c63795209f514f5d3554bc9450b8de"><div class="ttname"><a href="fonction_8c.html#ab9c63795209f514f5d3554bc9450b8de">detect_and_draw</a></div><div class="ttdeci">void detect_and_draw(IplImage *img, CvHaarClassifierCascade *cascade, face **tab_face)</div><div class="ttdoc">Détecte et renvoie un rectangle pour chaque visage sur l&#39;image. </div><div class="ttdef"><b>Definition:</b> <a href="fonction_8c_source.html#l00200">fonction.c:200</a></div></div>
+<div class="ttc" id="fonction_8c_html_a5e1058b3e8eb605a74ffdd7a26637b1e"><div class="ttname"><a href="fonction_8c.html#a5e1058b3e8eb605a74ffdd7a26637b1e">init_cascade</a></div><div class="ttdeci">CvHaarClassifierCascade * init_cascade()</div><div class="ttdoc">Charge les fichiers cascades pour la reconnaissance faciale. </div><div class="ttdef"><b>Definition:</b> <a href="fonction_8c_source.html#l00182">fonction.c:182</a></div></div>
+<div class="ttc" id="fonction_8h_html"><div class="ttname"><a href="fonction_8h.html">fonction.h</a></div><div class="ttdoc">Bibliothèque, Headers et Documentation des fonctions. </div></div>
+<div class="ttc" id="fonction_8h_html_a12190c71ff3acb9694bb2f782a1dfcdb"><div class="ttname"><a href="fonction_8h.html#a12190c71ff3acb9694bb2f782a1dfcdb">MAX_FACE</a></div><div class="ttdeci">#define MAX_FACE</div><div class="ttdoc">Nombre maximum de faces traitées. </div><div class="ttdef"><b>Definition:</b> <a href="fonction_8h_source.html#l00055">fonction.h:55</a></div></div>
+<div class="ttc" id="_kirby_track_8c_html_a0ddf1224851353fc92bfbff6f499fa97"><div class="ttname"><a href="_kirby_track_8c.html#a0ddf1224851353fc92bfbff6f499fa97">main</a></div><div class="ttdeci">int main(int argc, char *argv[])</div><div class="ttdoc">Entrée du programme. </div><div class="ttdef"><b>Definition:</b> <a href="_kirby_track_8c_source.html#l00023">KirbyTrack.c:23</a></div></div>
+<div class="ttc" id="structface_html"><div class="ttname"><a href="structface.html">face</a></div><div class="ttdoc">Contient les informations sur chaque face détectée : positions, largeur. </div></div>
 </div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Tue May 23 2017 17:13:57 for CamAdventure by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_23fdee2f6995db16c755697cdf620cf4.html">Code</a></li><li class="navelem"><a class="el" href="_navy_8c.html">Navy.c</a></li>
+    <li class="footer">Generated on Tue May 30 2017 18:00:53 for CamAdventure by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

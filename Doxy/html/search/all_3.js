@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['kirby',['KIRBY',['../_kirby_track_8c.html#a9270f8e0b3866a58cfa3a7173da21abd',1,'KirbyTrack.c']]],
-  ['kirbytrack_2ec',['KirbyTrack.c',['../_kirby_track_8c.html',1,'']]]
+  ['config',['config',['../fonction_8c.html#adcdd0544c8eb462cd2835ec99fa0f181',1,'config(int *LowH, int *HighH, int *LowS, int *HighS, int *LowV, int *HighV):&#160;fonction.c'],['../fonction_8h.html#adcdd0544c8eb462cd2835ec99fa0f181',1,'config(int *LowH, int *HighH, int *LowS, int *HighS, int *LowV, int *HighV):&#160;fonction.c']]],
+  ['controle_5fmoteur',['controle_moteur',['../fonction_8c.html#ad3f512a54511a63b30a8967077736766',1,'controle_moteur(double *angle):&#160;fonction.c'],['../fonction_8h.html#ad3f512a54511a63b30a8967077736766',1,'controle_moteur(double *angle):&#160;fonction.c']]]
 ];

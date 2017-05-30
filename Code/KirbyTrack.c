@@ -5,10 +5,8 @@
  * \brief      Figure Imposé : Suivi d'un objet coloré.
  *
  * \details   Suivie d'un Kirby (Rose) ou d'une étoile (Jaune) par une caméra avec mode interface utilisateur ou configuration
- * \bug (Résolu ?) SFML ne supporte qu'un nombre limité de sprite en fonction du PC
  * \bug Affichage OpenCV incompatible avec SFML
  * \todo Optimisation du chargement de la frame en image SFML
- * \todo Verifier les angles du RESET
  */
 
 
@@ -234,8 +232,8 @@ sf::Vector2i PosMouse = sf::Mouse::getPosition(window);
 
 		tracking = 0;
 		//Reset Position moteur
-		angle[0]=0; //ANGLES A VERIFIER
-		angle[1]=0;
+		angle[0]=60; //ANGLES A VERIFIER
+		angle[1]=100;
 		controle_moteur(angle); 
 	
 		aye.play();
@@ -284,5 +282,28 @@ sf::Vector2i PosMouse = sf::Mouse::getPosition(window);
 	return EXIT_SUCCESS;
 }
 
+/*
+	//musique
+	if(aye.getStatus()==sf::Sound::Stopped){
+			aye.setPitch(0.5);
+			aye.setVolume(150);
+			aye.setLoop(true);
+			aye.play();
+		}
+*/
 
+/*
+	//Link
+	sf::Texture txLink;
+	sf::Sprite Link;
+	
+	if (!txLink.loadFromFile("Stock SFML/link.png")){
+		printf("Erreur chargement image SFML\n" );
+                break;
+	}
+	
+	Link.setTexture(txLink);
+	Link.setPosition(sf::Vector2f(posX-75, posY-75));
 
+	window.draw(Link);
+*/

@@ -39,10 +39,13 @@
  * \brief Programme en mode suivi de Kirby (Objet rose)
  * 
  * \def ETOILE
- * \brief Programme en mide suivi de l'étoile (Objet jaune)
+ * \brief Programme en mode suivi de l'étoile (Objet jaune)
  * 
  * \def JEU
  * \brief Coefficient de tolérance pour le suivi d'objet
+ *
+ * \def MAX_FACE
+ * \brief Nombre maximum de faces traitées
  */
 //#define CONFIG
 #define SFML
@@ -52,11 +55,16 @@
 #define MAX_FACE 2
 
 
-
+/**
+ * \struct face
+ * \brief Contient les informations sur chaque face détectée : positions, largeur
+ * \param point coordonnées en x et y du centre de la face
+ * \param largeur largeur de la face
+ */
 /*STRUCTURE*/
 typedef struct _face{
-	CvPoint point;
-	int largeur;
+	CvPoint point; /*!< coordonnées en x et y du centre de la face */
+	int largeur; /*!< largeur de la face */
 } face;
 
 typedef face* pface;
@@ -174,10 +182,44 @@ void Position_moy(IplImage* Binaire, int* posX, int * posY); //Effectue le baric
  */
 void traitement(IplImage* frame, IplImage* HSV, IplImage* Binaire, int LowH, int HighH, int LowS, int HighS, int LowV, int HighV); //Effectue une binarisation de frame en fonction des bornes HSV
 
+/**
+ * \fn int image_CV2SFML(IplImage* imcv, sf::Image imFlux)
+ * \brief Convertit une image opencv (IplImage) en une image SFML (sf::Image)
+ * \author Antoine
+ * \param imcv image OpenCv à convertir
+ * \param imFlux image SFML convertie en sortie de la fonction
+ * \return 0 si la convertion est réussie
+ * \bug A debugger ! Inutilisable en l'état
+ */
 int image_CV2SFML(IplImage* imcv, sf::Image imFlux); //Construction de imsf (RGBA) à partir de imcv (BGR), avec alpha constant (=1)
 
+/**
+ * \fn CvHaarClassifierCascade* init_cascade()
+ * \brief Charge les fichiers cascades pour la reconnaissance faciale
+ * \details fichier(s) chargé(s) : "haarcascade_frontalface_alt.xml"
+ * \author Jacques	
+ * \return Renvoie la cascade
+ */
 CvHaarClassifierCascade* init_cascade();
-void detect_and_draw( IplImage* img, CvHaarClassifierCascade* cascade, pface* tab_face );
 
+/**
+ * \fn void detect_and_draw( IplImage* img, CvHaarClassifierCascade* cascade, face** tab_face )
+ * \brief Détecte et renvoie un rectangle pour chaque visage sur l'image
+ * \author Jacques
+ * \param img Image sur laquelle on veut détecter des visages
+ * \param cascade structure contenant les données pour alimenter l'algorithme de reconnaissance d'image
+ * \param tab_face tableau des faces détectées
+ */
+void detect_and_draw( IplImage* img, CvHaarClassifierCascade* cascade, face** tab_face );
+
+/**
+ * \fn int* get_color(IplImage* image, face* rec_face)
+ * \brief retourne la couleur moyenne des pixels dans rec_face
+ * \author Antoine / Jacques
+ * \param image image d'où on cherche la moyenne
+ * \param imFlux image SFML convertie en sortie de la fonction
+ * \return 0 si la convertion est réussie
+ */
+void get_color(IplImage* image, face* rec_face, int* BGR);
 
 #endif

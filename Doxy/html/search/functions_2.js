@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['limite_5fmoteur',['limite_moteur',['../_kirby_track_8c.html#a9397b95e9279b0b9cd371c9a2b4514a2',1,'KirbyTrack.c']]]
+  ['detect_5fand_5fdraw',['detect_and_draw',['../fonction_8c.html#ab9c63795209f514f5d3554bc9450b8de',1,'detect_and_draw(IplImage *img, CvHaarClassifierCascade *cascade, face **tab_face):&#160;fonction.c'],['../fonction_8h.html#ab9c63795209f514f5d3554bc9450b8de',1,'detect_and_draw(IplImage *img, CvHaarClassifierCascade *cascade, face **tab_face):&#160;fonction.c']]]
 ];

@@ -105,14 +105,14 @@ void traitement(IplImage* frame, IplImage* HSV, IplImage* Binaire, int LowH, int
 	cvSmooth( HSV, HSV, CV_GAUSSIAN, 15, 0,0,0); //suppression des parasites par flou gaussien
 
 	//Binarisation
-/*
+
 	CvScalar valinf={(double)LowH,(double)LowS,(double)LowV};
 	CvScalar valsup={(double)HighH,(double)HighS,(double)HighV};
 
         cvInRangeS(HSV, valinf,valsup, Binaire);
-*/	
+	
 	//En cas d'erreur sur les trois ligne précédentes
-	cvInRangeS(HSV, CvScalar(LowH,LowS,LowV),CvScalar(HighH,HighS,HighV), Binaire);
+	//cvInRangeS(HSV, CvScalar(LowH,LowS,LowV),CvScalar(HighH,HighS,HighV), Binaire);
       
         //cvSmooth( Binaire, Binaire, CV_GAUSSIAN, 9, 9 ); //Legère suppression des parasites
 }
@@ -197,7 +197,7 @@ CvHaarClassifierCascade* init_cascade(){
 }
 
 // Function to detect and draw any faces that is present in an image
-void detect_and_draw( IplImage* img, CvHaarClassifierCascade* cascade, pface* tab_face)
+void detect_and_draw( IplImage* img, CvHaarClassifierCascade* cascade, face** tab_face)
 {
 
 	// Create memory for calculations
@@ -227,6 +227,10 @@ void detect_and_draw( IplImage* img, CvHaarClassifierCascade* cascade, pface* ta
 		// Detect the objects and store them in the sequence
 		CvSeq* faces = cvHaarDetectObjects( img, cascade, storage,1.1, 2, 0, cvSize(60, 60),cvSize(500, 500));
 
+		//Reset faces
+		tab_face[0]->largeur = 0;
+		tab_face[1]->largeur = 0;
+
 		// Loop the number of faces found.
 		for( i = 0; i < (faces ? faces->total : 0); i++ ){
 			// Create a new rectangle for drawing the face
@@ -246,7 +250,7 @@ void detect_and_draw( IplImage* img, CvHaarClassifierCascade* cascade, pface* ta
 				tab_face[i]->point.y = (pt1.y + pt2.y)/2;
 				tab_face[i]->largeur = r->width;
 
-				printf("VALEURS FACES : %d %d %d\n",tab_face[i]->point.x,tab_face[i]->point.y,tab_face[i]->largeur);
+				printf("VALEURS FACES n°%d : %d %d %d\n",i, tab_face[i]->point.x,tab_face[i]->point.y,tab_face[i]->largeur);
 			}
 		}
 	}
@@ -257,3 +261,35 @@ void detect_and_draw( IplImage* img, CvHaarClassifierCascade* cascade, pface* ta
 	//free
 	cvReleaseImage( &temp );
 }
+
+//Renvoie la couleur moyenne de rec_face
+void get_color(IplImage* image, face* rec_face, int* BGR){
+	printf("z\n");
+	CvScalar colors;
+	int largeur = rec_face->largeur;
+printf("e\n");
+	cvSetImageROI(image,cvRect(rec_face->point.x -largeur/2, rec_face->point.y -largeur/2, largeur,largeur));
+printf("r\n");
+	colors = cvAvg(image);
+printf("t\n");
+	cvResetImageROI(image);
+printf("y\n");
+	BGR[0] = colors.val[0];
+	BGR[1] = colors.val[1];
+	BGR[2] = colors.val[2];
+printf("u\n");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
