@@ -4,7 +4,7 @@
  * \date       avril - mai 2017
  * \brief      Figure Libre
  *
- * \details   Suivie d'un Kirby (Rose) ou d'une étoile (Jaune) par une caméra avec mode interface utilisateur ou configuration
+ * \details   Prototype réalité augmentée inspiré de Navy (The Legend of Zelda) avec détéction faciale 
  *
  * \todo Stabiliser detection faciale 
  */
@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
     		return EXIT_FAILURE;
 
   //Ouverture flux camera
-  CvCapture* capture = cvCaptureFromCAM( 0 );
+  CvCapture* capture = cvCaptureFromCAM( 1);
     
   if( !capture ){
   	printf("ERROR: capture is NULL \n" );
@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
 
 
 	//Création de la fenetre principale
-	sf::RenderWindow window(sf::VideoMode(width, height), "KirbyTrack");
+	sf::RenderWindow window(sf::VideoMode(width, height), "Navy");
   
 
     while(boucle)
@@ -186,9 +186,9 @@ int main(int argc, char* argv[])
 		hey.play();
 		rdy[0]=0;
 
-		printf("a\n");
+		
 		get_color(frame, tab_face[0],BGR);
-		printf("B = %d, G = %d, R = %d\n",BGR[0],BGR[1],BGR[2]);
+		//printf("B = %d, G = %d, R = %d\n",BGR[0],BGR[1],BGR[2]);
 	}
 
 

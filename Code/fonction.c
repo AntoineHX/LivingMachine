@@ -250,7 +250,7 @@ void detect_and_draw( IplImage* img, CvHaarClassifierCascade* cascade, face** ta
 				tab_face[i]->point.y = (pt1.y + pt2.y)/2;
 				tab_face[i]->largeur = r->width;
 
-				printf("VALEURS FACES n°%d : %d %d %d\n",i, tab_face[i]->point.x,tab_face[i]->point.y,tab_face[i]->largeur);
+				//printf("VALEURS FACES n°%d : %d %d %d\n",i, tab_face[i]->point.x,tab_face[i]->point.y,tab_face[i]->largeur);
 			}
 		}
 	}
@@ -264,32 +264,19 @@ void detect_and_draw( IplImage* img, CvHaarClassifierCascade* cascade, face** ta
 
 //Renvoie la couleur moyenne de rec_face
 void get_color(IplImage* image, face* rec_face, int* BGR){
-	printf("z\n");
+	
 	CvScalar colors;
 	int largeur = rec_face->largeur;
-printf("e\n");
+
 	cvSetImageROI(image,cvRect(rec_face->point.x -largeur/2, rec_face->point.y -largeur/2, largeur,largeur));
-printf("r\n");
+
 	colors = cvAvg(image);
-printf("t\n");
+
 	cvResetImageROI(image);
-printf("y\n");
+
 	BGR[0] = colors.val[0];
 	BGR[1] = colors.val[1];
 	BGR[2] = colors.val[2];
-printf("u\n");
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 

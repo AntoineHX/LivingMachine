@@ -1,6 +1,6 @@
 var NAVTREE =
 [
-  [ "CamAdventure", "index.html", [
+  [ "The Camera of Zelda", "index.html", [
     [ "Todo List", "todo.html", null ],
     [ "Bug List", "bug.html", null ],
     [ "Classes", null, [

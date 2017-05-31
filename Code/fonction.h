@@ -49,8 +49,8 @@
  */
 //#define CONFIG
 #define SFML
-#define KIRBY
-//#define ETOILE
+//#define KIRBY
+#define ETOILE
 
 #define MAX_FACE 2
 

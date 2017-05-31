@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 #endif
 
   //Ouverture flux camera
-  CvCapture* capture = cvCaptureFromCAM( 0 );
+  CvCapture* capture = cvCaptureFromCAM(1);
     
   if( !capture ){
   	printf("ERROR: capture is NULL \n" );
@@ -260,7 +260,7 @@ sf::Vector2i PosMouse = sf::Mouse::getPosition(window);
 		maj_angle(ajust_pos(posX-width/2,width), ajust_pos(posY-height/2,height), height*JEU, angle);
 		controle_moteur(angle); 
 
-		cvWaitKey(50);
+		cvWaitKey(200);
 	}
 
 
